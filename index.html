@@ -40,24 +40,34 @@
           </div>
 
           <button
-            class="nav-signal-button"
+            class="nav-orbit-button"
             type="button"
             aria-expanded="false"
             aria-controls="mobileNavPanel"
+            aria-label="Abrir navegación"
             data-mobile-nav-toggle
           >
-            <span class="nav-signal-dots" aria-hidden="true">
-              <span></span>
-              <span></span>
-              <span></span>
+            <span class="nav-orbit-core" aria-hidden="true">
+              <span class="nav-orbit-ring ring-one"></span>
+              <span class="nav-orbit-ring ring-two"></span>
+              <span class="nav-orbit-ring ring-three"></span>
+              <span class="nav-orbit-center"></span>
             </span>
-            <span class="nav-signal-label">Explorar</span>
           </button>
 
           <div class="mobile-nav-panel glass-panel" id="mobileNavPanel" data-mobile-nav-panel hidden>
-            <a href="#soluciones">Soluciones</a>
-            <a href="#proceso">Proceso</a>
-            <a href="#contacto">Contacto</a>
+            <a href="#soluciones" aria-label="Ir a Soluciones">
+              <span class="mobile-nav-symbol symbol-triangle" aria-hidden="true"></span>
+              <span class="sr-only">Soluciones</span>
+            </a>
+            <a href="#proceso" aria-label="Ir a Proceso">
+              <span class="mobile-nav-symbol symbol-circle" aria-hidden="true"></span>
+              <span class="sr-only">Proceso</span>
+            </a>
+            <a href="#contacto" aria-label="Ir a Contacto">
+              <span class="mobile-nav-symbol symbol-square" aria-hidden="true"></span>
+              <span class="sr-only">Contacto</span>
+            </a>
           </div>
         </nav>
       </header>

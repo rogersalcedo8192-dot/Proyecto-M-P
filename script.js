@@ -641,14 +641,28 @@ function initMobileNavigation() {
 
   const panelLinks = Array.from(panel.querySelectorAll('a[href^="#"]'));
 
+  const positionPanel = () => {
+    const rect = toggle.getBoundingClientRect();
+    const panelWidth = panel.offsetWidth || (window.innerWidth <= 720 ? 155.2 : 188.8);
+    const panelHeight = panel.offsetHeight || (window.innerWidth <= 720 ? 48 : 56);
+    const left = Math.max(12, rect.left - panelWidth - 10);
+    const top = Math.max(12, rect.top + rect.height / 2 - panelHeight / 2);
+
+    panel.style.setProperty("--mobile-nav-left", `${left}px`);
+    panel.style.setProperty("--mobile-nav-top", `${top}px`);
+  };
+
   const closePanel = () => {
     toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "Abrir navegación");
     panel.classList.remove("is-open");
     panel.hidden = true;
   };
 
   const openPanel = () => {
     toggle.setAttribute("aria-expanded", "true");
+    toggle.setAttribute("aria-label", "Cerrar navegación");
+    positionPanel();
     panel.hidden = false;
     requestAnimationFrame(() => {
       panel.classList.add("is-open");
@@ -681,8 +695,15 @@ function initMobileNavigation() {
   });
 
   window.addEventListener("resize", () => {
+    positionPanel();
     if (window.innerWidth > 960) closePanel();
   });
+
+  window.addEventListener("scroll", () => {
+    if (!panel.hidden) positionPanel();
+  }, { passive: true });
+
+  positionPanel();
 }
 
 function initSvgDraw() {
