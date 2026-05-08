@@ -643,10 +643,10 @@ function initMobileNavigation() {
 
   const positionPanel = () => {
     const rect = toggle.getBoundingClientRect();
-    const panelWidth = panel.offsetWidth || (window.innerWidth <= 720 ? 155.2 : 188.8);
-    const panelHeight = panel.offsetHeight || (window.innerWidth <= 720 ? 48 : 56);
-    const left = Math.max(12, rect.left - panelWidth - 10);
-    const top = Math.max(12, rect.top + rect.height / 2 - panelHeight / 2);
+    const panelWidth = panel.offsetWidth || (window.innerWidth <= 720 ? 160 : 172);
+    const panelHeight = panel.offsetHeight || (window.innerWidth <= 720 ? 148 : 160);
+    const left = Math.max(12, rect.left - panelWidth + rect.width);
+    const top = Math.max(12, rect.top + rect.height + 4);
 
     panel.style.setProperty("--mobile-nav-left", `${left}px`);
     panel.style.setProperty("--mobile-nav-top", `${top}px`);
