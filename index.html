@@ -1,0 +1,597 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>M&P | Creamos el Futuro del Marketing</title>
+    <link rel="icon" type="image/png" href="assets/logo_robot.png" />
+    <meta
+      name="description"
+      content="M&P Enterprise S.A.S automatiza, acelera y escala negocios con inteligencia artificial, automatizaciÃ³n y experiencias digitales premium."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="space-field" id="spaceField" aria-hidden="true"></div>
+    <div class="pointer-glow" id="pointerGlow" aria-hidden="true"></div>
+    <canvas class="particle-layer" id="particleLayer" aria-hidden="true"></canvas>
+
+    <div class="page-shell">
+      <header class="site-header">
+        <nav class="navbar glass-panel">
+          <a class="brand" href="#top" aria-label="M&P Enterprise S.A.S">
+            <img src="assets/logo.png" alt="Logo M&P Enterprise S.A.S" />
+            <div>
+              <span>M&amp;P</span>
+              <small>Creamos el Futuro del Marketing</small>
+            </div>
+          </a>
+
+          <div class="nav-links">
+            <a href="#soluciones">Soluciones</a>
+            <a href="#proceso">Proceso</a>
+            <a href="#contacto">Contacto</a>
+          </div>
+
+          <button
+            class="nav-signal-button"
+            type="button"
+            aria-expanded="false"
+            aria-controls="mobileNavPanel"
+            data-mobile-nav-toggle
+          >
+            <span class="nav-signal-dots" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+            <span class="nav-signal-label">Explorar</span>
+          </button>
+
+          <div class="mobile-nav-panel glass-panel" id="mobileNavPanel" data-mobile-nav-panel hidden>
+            <a href="#soluciones">Soluciones</a>
+            <a href="#proceso">Proceso</a>
+            <a href="#contacto">Contacto</a>
+          </div>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero section">
+          <div class="hero-video">
+  <video autoplay muted loop playsinline>
+    <source src="video/mi-video.mp4" type="video/mp4" />
+    Tu navegador no soporta video HTML5.
+  </video>
+</div>
+
+
+          <div class="hero-content">
+            <p class="eyebrow reveal">AI Growth Engine</p>
+            <h1 class="reveal" data-matrix-text>
+              Automatizamos y escalamos tu negocio con inteligencia artificial
+            </h1>
+            <p class="hero-subheadline reveal">
+              Sistemas que <span class="brand-accent">convierten</span>,
+              <span class="brand-accent-alt">venden</span> y
+              <span class="brand-accent">crecen contigo</span>.
+            </p>
+
+            <div class="hero-actions reveal">
+              <a class="primary-button" href="#contacto">
+                Quiero automatizar mi negocio
+              </a>
+              <div class="live-badge glass-panel">
+                <span class="pulse-dot"></span>
+                <span>Automatizacion activa 24/7</span>
+              </div>
+            </div>
+
+            <div class="hero-metrics reveal">
+              <article class="metric glass-panel">
+                <strong>+IA</strong>
+                <span>Embudos, captacion y seguimiento sincronizados</span>
+              </article>
+              <article class="metric glass-panel">
+                <strong>360</strong>
+                <span>Marketing, producto y automatizacion en un solo sistema</span>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="value-strip section reveal">
+          <div class="strip-label">Potenciamos crecimiento con</div>
+          <div class="rotating-copy" aria-live="polite">
+            <span id="rotatingText">automatizaciones que convierten cada contacto en oportunidad</span>
+          </div>
+        </section>
+
+        <section class="service-ticker service-ticker-forward reveal" aria-label="Canales, automatizacion y produccion digital">
+          <div class="service-ticker-track">
+            <div class="service-ticker-group">
+              <article class="service-icon-pill" aria-label="WhatsApp Automation">
+                <img class="service-icon" src="assets/whatsapp.svg" alt="WhatsApp Automation" />
+                <span class="sr-only">WhatsApp Automation</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Instagram Flows">
+                <img class="service-icon" src="assets/instagram.svg" alt="Instagram Flows" />
+                <span class="sr-only">Instagram Flows</span>
+              </article>
+              <article class="service-icon-pill" aria-label="TikTok Conversion">
+                <img class="service-icon" src="assets/tiktok.svg" alt="TikTok Conversion" />
+                <span class="sr-only">TikTok Conversion</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Telegram Bots">
+                <img class="service-icon" src="assets/telegram.svg" alt="Telegram Bots" />
+                <span class="sr-only">Telegram Bots</span>
+              </article>
+              <article class="service-icon-pill" aria-label="HubSpot CRM">
+                <img class="service-icon" src="assets/hubspot.svg" alt="HubSpot CRM" />
+                <span class="sr-only">HubSpot CRM</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Make">
+                <img class="service-icon" src="assets/make.svg" alt="Make" />
+                <span class="sr-only">Make</span>
+              </article>
+              <article class="service-icon-pill" aria-label="n8n">
+                <img class="service-icon" src="assets/n8n.svg" alt="n8n" />
+                <span class="sr-only">n8n</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Resend">
+                <img class="service-icon" src="assets/resend.svg" alt="Resend" />
+                <span class="sr-only">Resend</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Web Apps">
+                <img class="service-icon" src="assets/webapp.svg" alt="Web Apps" />
+                <span class="sr-only">Web Apps</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Landing Pages">
+                <img class="service-icon" src="assets/landing.svg" alt="Landing Pages" />
+                <span class="sr-only">Landing Pages</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Video y Multimedia">
+                <img class="service-icon" src="assets/video.svg" alt="Video y Multimedia" />
+                <span class="sr-only">Video y Multimedia</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Branding y Logos">
+                <img class="service-icon" src="assets/branding.svg" alt="Branding y Logos" />
+                <span class="sr-only">Branding y Logos</span>
+              </article>
+            </div>
+            <div class="service-ticker-group" aria-hidden="true">
+              <article class="service-icon-pill" aria-label="WhatsApp Automation">
+                <img class="service-icon" src="assets/whatsapp.svg" alt="" />
+                <span class="sr-only">WhatsApp Automation</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Instagram Flows">
+                <img class="service-icon" src="assets/instagram.svg" alt="" />
+                <span class="sr-only">Instagram Flows</span>
+              </article>
+              <article class="service-icon-pill" aria-label="TikTok Conversion">
+                <img class="service-icon" src="assets/tiktok.svg" alt="" />
+                <span class="sr-only">TikTok Conversion</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Telegram Bots">
+                <img class="service-icon" src="assets/telegram.svg" alt="" />
+                <span class="sr-only">Telegram Bots</span>
+              </article>
+              <article class="service-icon-pill" aria-label="HubSpot CRM">
+                <img class="service-icon" src="assets/hubspot.svg" alt="" />
+                <span class="sr-only">HubSpot CRM</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Make">
+                <img class="service-icon" src="assets/make.svg" alt="" />
+                <span class="sr-only">Make</span>
+              </article>
+              <article class="service-icon-pill" aria-label="n8n">
+                <img class="service-icon" src="assets/n8n.svg" alt="" />
+                <span class="sr-only">n8n</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Resend">
+                <img class="service-icon" src="assets/resend.svg" alt="" />
+                <span class="sr-only">Resend</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Web Apps">
+                <img class="service-icon" src="assets/webapp.svg" alt="" />
+                <span class="sr-only">Web Apps</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Landing Pages">
+                <img class="service-icon" src="assets/landing.svg" alt="" />
+                <span class="sr-only">Landing Pages</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Video y Multimedia">
+                <img class="service-icon" src="assets/video.svg" alt="" />
+                <span class="sr-only">Video y Multimedia</span>
+              </article>
+              <article class="service-icon-pill" aria-label="Branding y Logos">
+                <img class="service-icon" src="assets/branding.svg" alt="" />
+                <span class="sr-only">Branding y Logos</span>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="solutions section" id="soluciones">
+          <div class="solutions-shell">
+            <div class="solution-carousel reveal" data-diagonal-carousel>
+              <button
+                class="solution-nav solution-nav-prev"
+                data-carousel-prev
+                type="button"
+                aria-label="Ver servicio anterior"
+              >
+                <span aria-hidden="true">&#8249;</span>
+              </button>
+
+              <div class="solution-stage" aria-label="Servicios destacados">
+                <div class="solution-rail" data-carousel-track>
+                  <article class="solution-tile" data-carousel-slide>
+                    <div class="solution-tile-frame">
+                      <div class="solution-visual visual-conversion">
+                        <svg viewBox="0 0 320 180" aria-hidden="true">
+                          <rect x="28" y="36" width="142" height="108" rx="18"></rect>
+                          <rect x="54" y="62" width="90" height="10" rx="5"></rect>
+                          <rect x="54" y="82" width="64" height="10" rx="5"></rect>
+                          <circle cx="232" cy="72" r="30"></circle>
+                          <path d="M214 104 L232 72 L248 88 L278 44"></path>
+                          <circle cx="278" cy="44" r="8"></circle>
+                        </svg>
+                      </div>
+                      <p class="solution-tile-index"></p>
+                      <h3>Landing pages que convierten visitantes en clientes</h3>
+                      <p class="solution-tile-copy"><span class="brand-accent">Jerarquia visual</span> fuerte y <span class="brand-accent-alt">CTA listos para accion</span>.</p>
+                      <span class="solution-tile-pill">Conversion</span>
+                    </div>
+                  </article>
+
+                  <article class="solution-tile" data-carousel-slide>
+                    <div class="solution-tile-frame">
+                      <div class="solution-visual visual-automation">
+                        <svg viewBox="0 0 320 180" aria-hidden="true">
+                          <circle cx="96" cy="90" r="26"></circle>
+                          <circle cx="160" cy="54" r="18"></circle>
+                          <circle cx="222" cy="94" r="24"></circle>
+                          <path d="M118 78 L144 62"></path>
+                          <path d="M176 64 L202 84"></path>
+                          <path d="M96 116 L96 142"></path>
+                          <path d="M222 118 L222 144"></path>
+                          <rect x="132" y="114" width="56" height="28" rx="14"></rect>
+                        </svg>
+                      </div>
+                      <p class="solution-tile-index"></p>
+                      <h3>Automatizacion con IA que vende por ti 24/7</h3>
+                      <p class="solution-tile-copy">Secuencias que <span class="brand-accent">responden</span>, nutren y <span class="brand-accent-alt">cierran</span> sin pausa.</p>
+                      <span class="solution-tile-pill">Always on</span>
+                    </div>
+                  </article>
+
+                  <article class="solution-tile" data-carousel-slide>
+                    <div class="solution-tile-frame">
+                      <div class="solution-visual visual-product">
+                        <svg viewBox="0 0 320 180" aria-hidden="true">
+                          <rect x="42" y="42" width="126" height="84" rx="18"></rect>
+                          <rect x="198" y="54" width="56" height="100" rx="16"></rect>
+                          <rect x="66" y="60" width="78" height="8" rx="4"></rect>
+                          <rect x="66" y="78" width="56" height="8" rx="4"></rect>
+                          <circle cx="226" cy="76" r="8"></circle>
+                          <path d="M96 126 L140 126"></path>
+                        </svg>
+                      </div>
+                      <p class="solution-tile-index"></p>
+                      <h3>Apps web y moviles para escalar tu negocio</h3>
+                      <p class="solution-tile-copy">Productos digitales con <span class="brand-accent">presencia premium</span> y <span class="brand-accent-alt">operacion inteligente</span>.</p>
+                      <span class="solution-tile-pill">Build to scale</span>
+                    </div>
+                  </article>
+
+                  <article class="solution-tile" data-carousel-slide>
+                    <div class="solution-tile-frame">
+                      <div class="solution-visual visual-leads">
+                        <svg viewBox="0 0 320 180" aria-hidden="true">
+                          <path d="M56 54 H264"></path>
+                          <path d="M76 54 V126"></path>
+                          <path d="M160 54 V146"></path>
+                          <path d="M244 54 V112"></path>
+                          <circle cx="76" cy="54" r="10"></circle>
+                          <circle cx="160" cy="94" r="10"></circle>
+                          <circle cx="244" cy="112" r="10"></circle>
+                          <circle cx="160" cy="146" r="10"></circle>
+                          <path d="M76 54 L160 94 L244 112"></path>
+                        </svg>
+                      </div>
+                      <p class="solution-tile-index"></p>
+                      <h3>Sistemas de captacion de clientes que aceleran demanda</h3>
+                      <p class="solution-tile-copy"><span class="brand-accent">Trafico</span>, formularios y <span class="brand-accent-alt">CRM conectados</span> en un mismo flujo.</p>
+                      <span class="solution-tile-pill">Leads conectados</span>
+                    </div>
+                  </article>
+
+                  <article class="solution-tile" data-carousel-slide>
+                    <div class="solution-tile-frame">
+                      <div class="solution-visual visual-brand">
+                        <svg viewBox="0 0 320 180" aria-hidden="true">
+                          <circle cx="108" cy="88" r="42"></circle>
+                          <path d="M108 52 V124"></path>
+                          <path d="M72 88 H144"></path>
+                          <rect x="186" y="52" width="84" height="84" rx="20"></rect>
+                          <path d="M206 112 L226 72 L244 92 L254 76"></path>
+                          <circle cx="254" cy="76" r="6"></circle>
+                        </svg>
+                      </div>
+                      <p class="solution-tile-index"></p>
+                      <h3>Contenido digital que posiciona tu marca</h3>
+                      <p class="solution-tile-copy">Activos visuales que elevan <span class="brand-accent">autoridad</span> y <span class="brand-accent-alt">crecimiento</span>.</p>
+                      <span class="solution-tile-pill">Posicionamiento</span>
+                    </div>
+                  </article>
+                </div>
+              </div>
+
+              <button
+                class="solution-nav solution-nav-next"
+                data-carousel-next
+                type="button"
+                aria-label="Ver siguiente servicio"
+              >
+                <span aria-hidden="true">&#8250;</span>
+              </button>
+
+              <div class="solution-dots" data-carousel-dots aria-label="Selector de servicios"></div>
+
+              <div class="solution-cta-row">
+                <a class="solution-link" href="#contacto">Activar estrategia</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cinematic-section section" id="proceso">
+          <div class="cinematic-media">
+            <div class="cinematic-card" aria-hidden="true">
+              <div class="cinematic-face cinematic-front">
+                <div class="cinematic-video">
+                  <video
+                    class="cinematic-video-player"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="auto"
+                  >
+                    <source src="video/video-rompecabezas.mp4" type="video/mp4" />
+                  </video>
+                  <div class="video-overlay"></div>
+                  <div class="video-beam beam-one"></div>
+                  <div class="video-beam beam-two"></div>
+                  <div class="video-noise"></div>
+                </div>
+              </div>
+              <div class="cinematic-face cinematic-back">
+                <div class="cinematic-image-full"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cinematic-copy glass-panel reveal cinematic-process-panel">
+            <p class="eyebrow">Asi se mueve tu sistema</p>
+            <h2 class="cinematic-process-headline">
+              Lo que hacemos para <span class="brand-accent">atraer</span>,
+              <span class="brand-accent-alt">convertir</span> y
+              <span class="brand-accent">escalar</span>.
+            </h2>
+
+            <div
+              class="cinematic-word-grid cinematic-process-grid"
+              aria-label="Conceptos clave"
+              data-word-grid
+              data-word-order="0,2,4,6,8,10,1,3,5,7,9,11"
+            >
+              <span class="cinematic-word cinematic-word-accent is-active">Innovacion</span>
+              <span class="cinematic-word">Automatizacion</span>
+              <span class="cinematic-word cinematic-word-accent-alt">Captacion</span>
+              <span class="cinematic-word">Conversion</span>
+              <span class="cinematic-word cinematic-word-accent">CRM</span>
+              <span class="cinematic-word">Ventas</span>
+              <span class="cinematic-word cinematic-word-accent-alt">Escalar</span>
+              <span class="cinematic-word">Integraciones</span>
+              <span class="cinematic-word cinematic-word-accent">Velocidad</span>
+              <span class="cinematic-word">Precision</span>
+              <span class="cinematic-word cinematic-word-accent-alt">Posicionar</span>
+              <span class="cinematic-word">Presencia</span>
+            </div>
+
+            
+          </div>
+        </section>
+
+        <section class="contact section" id="contacto">
+          <div class="contact-card glass-panel reveal">
+            <div>
+              <p class="eyebrow">Listo para crecer</p>
+              <h2>Tu proximo <span class="brand-accent">sistema de ventas</span> puede empezar <span class="brand-accent-alt">hoy</span>.</h2>
+              <p>
+                Hablemos de <span class="brand-accent">automatizacion</span>, <span class="brand-accent-alt">captacion</span> y productos digitales listos para hacer crecer tu empresa.
+              </p>
+            </div>
+
+            <a class="primary-button" href="mailto:rasalcedo76@gmail.com">
+              Agendar conversacion
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="ticker">
+          <div class="ticker-track">
+            <div class="ticker-group">
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/chatgpt.svg" alt="Logo ChatGPT" />
+                <span class="ticker-tool-name">ChatGPT</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/claude.svg" alt="Logo Claude" />
+                <span class="ticker-tool-name">Claude</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/codex.svg" alt="Logo Codex" />
+                <span class="ticker-tool-name">Codex</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/deepseek.svg" alt="Logo DeepSeek" />
+                <span class="ticker-tool-name">DeepSeek</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/gemini.svg" alt="Logo Gemini" />
+                <span class="ticker-tool-name">Gemini</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/grok.svg" alt="Logo Grok" />
+                <span class="ticker-tool-name">Grok</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/kimi.svg" alt="Logo Kimi IA" />
+                <span class="ticker-tool-name">Kimi IA</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/meta.svg" alt="Logo Meta AI" />
+                <span class="ticker-tool-name">Meta AI</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/perplexity.svg" alt="Logo Perplexity" />
+                <span class="ticker-tool-name">Perplexity</span>
+              </article>
+            </div>
+
+            <div class="ticker-group" aria-hidden="true">
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/chatgpt.svg" alt="" />
+                <span class="ticker-tool-name">ChatGPT</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/claude.svg" alt="" />
+                <span class="ticker-tool-name">Claude</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/codex.svg" alt="" />
+                <span class="ticker-tool-name">Codex</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/deepseek.svg" alt="" />
+                <span class="ticker-tool-name">DeepSeek</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/gemini.svg" alt="" />
+                <span class="ticker-tool-name">Gemini</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/grok.svg" alt="" />
+                <span class="ticker-tool-name">Grok</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/kimi.svg" alt="" />
+                <span class="ticker-tool-name">Kimi IA</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/meta.svg" alt="" />
+                <span class="ticker-tool-name">Meta AI</span>
+              </article>
+              <article class="ticker-tool">
+                <img class="ticker-tool-logo" src="assets/perplexity.svg" alt="" />
+                <span class="ticker-tool-name">Perplexity</span>
+              </article>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <div
+      class="ai-widget"
+      data-ai-widget
+      data-whatsapp="573135781020"
+      data-email="rasalcedo76@gmail.com"
+    >
+      <button
+        class="ai-widget-toggle glass-panel hover-spotlight"
+        type="button"
+        aria-expanded="false"
+        aria-controls="aiWidgetPanel"
+        data-ai-widget-toggle
+      >
+        <span class="ai-widget-toggle-ring" aria-hidden="true"></span>
+        <span class="ai-widget-toggle-tray" aria-hidden="true">
+          <small>Me puedes preguntar</small>
+          <strong data-ai-toggle-copy>Quiero una <span class="ai-key ai-key-blue">demo</span></strong>
+        </span>
+        <span class="ai-widget-toggle-icon" aria-hidden="true">
+          <img src="assets/logo_robot.png" alt="" />
+        </span>
+      </button>
+
+      <section
+        class="ai-widget-panel glass-panel"
+        id="aiWidgetPanel"
+        aria-label="Chat de asistencia con IA"
+        hidden
+      >
+        <div class="ai-widget-header">
+          <div class="ai-widget-header-copy">
+            <span class="ai-widget-header-avatar" aria-hidden="true">
+              <img src="assets/logo_robot.png" alt="" />
+            </span>
+            <div>
+            <p class="ai-widget-eyebrow">MiPy Assistant</p>
+            <h2>Tu agente de crecimiento</h2>
+            </div>
+          </div>
+          <button class="ai-widget-close" type="button" aria-label="Cerrar chat" data-ai-widget-close>
+            ×
+          </button>
+        </div>
+
+        <div class="ai-widget-thread" data-ai-thread>
+          <article class="ai-message ai-message-bot">
+            <p>Hola. ¿En qué te puedo asistir hoy?.</p>
+          </article>
+        </div>
+
+        <form class="ai-widget-form" data-ai-form>
+          <label class="sr-only" for="aiWidgetInput">Escribe tu mensaje</label>
+          <input
+            id="aiWidgetInput"
+            class="ai-widget-input"
+            type="text"
+            name="message"
+            placeholder="Cuéntame que quieres automatizar..."
+            autocomplete="off"
+          />
+          <button class="ai-widget-send" type="submit">Enviar</button>
+        </form>
+
+        <div class="ai-widget-footer">
+          <a
+            class="ai-widget-link"
+            href="https://wa.me/573135781020?text=Hola%20quiero%20automatizar%20mi%20negocio"
+            target="_blank"
+            rel="noopener"
+          >
+            WhatsApp
+          </a>
+          <a class="ai-widget-link" href="mailto:rasalcedo76@gmail.com">
+            Correo
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
