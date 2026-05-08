@@ -2319,6 +2319,15 @@ img {
 }
 
 @media (max-width: 720px) {
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0.7rem 0 0;
+    z-index: 80;
+  }
+
   .space-field,
   .pointer-glow,
   .particle-layer {
@@ -2357,7 +2366,7 @@ img {
 
   .hero {
     min-height: auto;
-    padding: 5.5rem 0 3rem;
+    padding: 6.6rem 0 3rem;
   }
 
   .hero-video video {
@@ -2370,19 +2379,15 @@ img {
 
   .ai-widget {
     right: 0.8rem;
+    left: auto;
     bottom: 0.8rem;
-    left: 0.8rem;
-    justify-items: stretch;
-  }
-
-  .ai-widget-toggle,
-  .ai-widget-panel {
-    width: 100%;
+    width: auto;
+    justify-items: end;
   }
 
   .ai-widget-toggle {
-    width: 5rem;
-    height: 5rem;
+    width: 4.6rem;
+    height: 4.6rem;
   }
 
   .ai-widget-toggle-tray {
@@ -2398,8 +2403,37 @@ img {
     transform: translate3d(0, 0, 0) scale(1);
   }
 
+  .ai-widget-panel {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    border-radius: 0;
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ai-widget-header {
+    margin-bottom: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .ai-widget-thread {
+    max-height: none;
+    flex: 1;
+    min-height: 0;
+  }
+
   .ai-widget-form {
     grid-template-columns: 1fr;
+    flex-shrink: 0;
+  }
+
+  .ai-widget-footer {
+    flex-shrink: 0;
   }
 
   .hero-metrics {
