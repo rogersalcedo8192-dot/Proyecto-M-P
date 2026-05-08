@@ -6,15 +6,22 @@ const rotatingPhrases = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
-  initPointerGlow();
-  initSpaceField();
+  const constrainedMode = isConstrainedExperience();
+
+  if (!constrainedMode) {
+    initPointerGlow();
+    initSpaceField();
+  }
+
   initCursor();
   initHoverSpotlights();
   initReveal();
   initMatrixText();
   initCinematicWords();
   initRotatingText();
-  initParticles();
+  if (!constrainedMode) {
+    initParticles();
+  }
   initHeroParallax();
   initMagneticButtons();
   initCounters();
@@ -24,6 +31,15 @@ document.addEventListener("DOMContentLoaded", () => {
   initDiagonalCarousels();
   initAIWidget();
 });
+
+function isConstrainedExperience() {
+  const isSmallViewport = window.innerWidth <= 720;
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+  const saveData = navigator.connection?.saveData === true;
+
+  return isSmallViewport || prefersReducedMotion || (coarsePointer && saveData);
+}
 
 function initPointerGlow() {
   const glow = document.getElementById("pointerGlow");

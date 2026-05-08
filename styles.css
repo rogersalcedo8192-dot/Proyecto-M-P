@@ -478,6 +478,10 @@ img {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(57, 160, 255, 0.2), transparent 28%),
+    radial-gradient(circle at 82% 28%, rgba(255, 63, 180, 0.16), transparent 24%),
+    linear-gradient(180deg, rgba(4, 8, 20, 0.78), rgba(4, 8, 20, 0.9));
 }
 
 .hero-video video {
@@ -2315,6 +2319,12 @@ img {
 }
 
 @media (max-width: 720px) {
+  .space-field,
+  .pointer-glow,
+  .particle-layer {
+    display: none;
+  }
+
   .navbar {
     padding: 0.8rem;
     border-radius: 24px;
@@ -2348,6 +2358,10 @@ img {
   .hero {
     min-height: auto;
     padding: 5.5rem 0 3rem;
+  }
+
+  .hero-video video {
+    display: none;
   }
 
   .hero h1 {
