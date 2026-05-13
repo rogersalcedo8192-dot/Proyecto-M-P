@@ -33,12 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function isConstrainedExperience() {
-  const isSmallViewport = window.innerWidth <= 720;
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
   const saveData = navigator.connection?.saveData === true;
 
-  return isSmallViewport || prefersReducedMotion || (coarsePointer && saveData);
+  return prefersReducedMotion || (coarsePointer && saveData);
 }
 
 function initPointerGlow() {
@@ -52,9 +51,9 @@ function initPointerGlow() {
 
   updatePointer(window.innerWidth / 2, window.innerHeight / 2);
 
-  document.addEventListener("mousemove", (event) => {
+  document.addEventListener("pointermove", (event) => {
     updatePointer(event.clientX, event.clientY);
-  });
+  }, { passive: true });
 }
 
 function initSpaceField() {
@@ -179,10 +178,10 @@ function initSpaceField() {
     rafId = requestAnimationFrame(render);
   }
 
-  document.addEventListener("mousemove", (event) => {
+  document.addEventListener("pointermove", (event) => {
     pointer.x = event.clientX;
     pointer.y = event.clientY;
-  });
+  }, { passive: true });
 
   window.addEventListener("resize", buildField);
   buildField();
@@ -495,10 +494,10 @@ function initParticles() {
   }
 
   window.addEventListener("resize", resize);
-  document.addEventListener("mousemove", (event) => {
+  document.addEventListener("pointermove", (event) => {
     mouse.x = event.clientX;
     mouse.y = event.clientY;
-  });
+  }, { passive: true });
   resize();
   frame();
 }
