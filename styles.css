@@ -1213,7 +1213,7 @@ img {
 .offer-card {
   position: relative;
   display: grid;
-  grid-template-rows: auto auto;
+  grid-template-rows: 1fr auto;
   align-content: start;
   gap: 1.15rem;
   min-height: 13.5rem;
@@ -1319,14 +1319,17 @@ img {
 .offer-card-top {
   position: relative;
   z-index: 1;
+  min-width: 0;
 }
 
 .offer-card h3 {
   margin: 0.85rem 0 0;
   font-family: "Sora", sans-serif;
-  font-size: clamp(1.1rem, 1.55vw, 1.45rem);
+  font-size: clamp(1rem, 1.35vw, 1.3rem);
   line-height: 1.08;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .offer-price {
@@ -1412,6 +1415,7 @@ img {
   z-index: 1;
   display: grid;
   gap: 0.85rem;
+  align-self: end;
 }
 
 .offer-details summary {
@@ -3137,7 +3141,8 @@ img {
   }
 
   .offer-card h3 {
-    font-size: 1.18rem;
+    font-size: 1.05rem;
+    line-height: 1.08;
   }
 
   .offer-price strong {
