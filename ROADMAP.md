@@ -10,7 +10,7 @@ La landing ya cuenta con:
 - Carrusel de servicios con movimiento automatico y controles manuales.
 - Cinta de canales y herramientas con separacion uniforme y animacion bidireccional.
 - Seccion de ofertas/precios en USD con tarjetas responsive.
-- Informacion conceptual por cada servicio, visible en mobile y como capa interactiva en desktop.
+- Tarjetas de ofertas compactas con detalles desplegables.
 - Tarjeta visual con video del rompecabezas y reverso con imagen.
 - Branding visual consistente con M&P.
 
@@ -38,6 +38,7 @@ La landing ya cuenta con:
 - [x] Agregar tarjeta de automatizacion de WhatsApp e Instagram con IA.
 - [x] Unificar videos e imagenes IA tipo poster en un solo pack.
 - [x] Separar consultoria de automatizacion IA de la web app custom a medida.
+- [x] Compactar tarjetas de ofertas y ocultar detalles hasta que el usuario los despliegue.
 
 ## Fase 1: QA visual y responsive
 
