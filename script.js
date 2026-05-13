@@ -672,6 +672,7 @@ function initMobileNavigation() {
     toggle.setAttribute("aria-label", "Abrir navegación");
     panel.classList.remove("is-open");
     panel.hidden = true;
+    document.body.classList.remove("mobile-nav-open");
   };
 
   const openPanel = () => {
@@ -679,6 +680,7 @@ function initMobileNavigation() {
     toggle.setAttribute("aria-label", "Cerrar navegación");
     positionPanel();
     panel.hidden = false;
+    document.body.classList.add("mobile-nav-open");
     requestAnimationFrame(() => {
       panel.classList.add("is-open");
     });
@@ -759,6 +761,7 @@ function initAIWidget() {
   const input = widget.querySelector(".ai-widget-input");
   const thread = widget.querySelector("[data-ai-thread]");
   const toggleCopy = widget.querySelector("[data-ai-toggle-copy]");
+  const quickActions = Array.from(widget.querySelectorAll("[data-ai-prompt]"));
   const whatsapp = widget.dataset.whatsapp || "";
   const email = widget.dataset.email || "";
 
@@ -795,14 +798,18 @@ function initAIWidget() {
     panel.hidden = false;
     toggle.setAttribute("aria-expanded", "true");
     widget.classList.add("is-open");
+    document.body.classList.add("ai-widget-open");
     startToggleCopyRotation();
-    window.setTimeout(() => input.focus(), 60);
+    if (!window.matchMedia("(max-width: 720px)").matches) {
+      window.setTimeout(() => input.focus(), 60);
+    }
   };
 
   const closeWidget = () => {
     panel.hidden = true;
     toggle.setAttribute("aria-expanded", "false");
     widget.classList.remove("is-open");
+    document.body.classList.remove("ai-widget-open");
     stopToggleCopyRotation();
   };
 
@@ -902,9 +909,19 @@ function initAIWidget() {
 
   closeButton?.addEventListener("click", closeWidget);
 
+  quickActions.forEach((button) => {
+    button.addEventListener("click", () => {
+      handleUserMessage(button.dataset.aiPrompt || button.textContent);
+    });
+  });
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     handleUserMessage(input.value);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !panel.hidden) closeWidget();
   });
 }
 
@@ -920,6 +937,7 @@ class DiagonalCarousel {
     this.current = 0;
     this.target = 0;
     this.autoDrift = 0.22;
+    this.autoDriftMobile = 0.34;
     this.lastTime = 0;
     this.isDragging = false;
     this.dragStartX = 0;
@@ -928,6 +946,7 @@ class DiagonalCarousel {
     this.dots = [];
     this.rafId = 0;
     this.resumeTimer = 0;
+    this.canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
     this.metrics = {
       spacing: 310,
@@ -980,10 +999,12 @@ class DiagonalCarousel {
     });
 
     this.root.addEventListener("pointerenter", () => {
+      if (!this.canHover) return;
       this.autoEnabled = false;
     });
 
     this.root.addEventListener("pointerleave", () => {
+      if (!this.canHover) return;
       this.autoEnabled = true;
       this.resumeAutoFromCurrent();
     });
@@ -1030,15 +1051,16 @@ class DiagonalCarousel {
 
   handleResize() {
     const compact = window.innerWidth < 720;
+    this.canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     this.metrics = compact
       ? {
-          spacing: 220,
-          lift: 72,
-          minScale: 0.72,
-          scaleFactor: 0.14,
-          blur: 5,
+          spacing: 226,
+          lift: 42,
+          minScale: 0.82,
+          scaleFactor: 0.09,
+          blur: 3,
           activeThreshold: 0.24,
-          fadeThreshold: 2.05
+          fadeThreshold: 1.9
         }
       : {
           spacing: 310,
@@ -1056,7 +1078,8 @@ class DiagonalCarousel {
     this.lastTime = time;
 
     if (this.autoEnabled && !this.isDragging) {
-      this.target = this.wrapFloat(this.target + this.autoDrift * deltaSeconds);
+      const speed = window.innerWidth < 720 ? this.autoDriftMobile : this.autoDrift;
+      this.target = this.wrapFloat(this.target + speed * deltaSeconds);
     }
 
     const diffToTarget = shortestCircularDelta(this.current, this.target, this.slides.length);
@@ -1138,7 +1161,8 @@ class DiagonalCarousel {
     window.clearTimeout(this.resumeTimer);
     this.resumeTimer = window.setTimeout(() => {
       this.autoEnabled = true;
-    }, 2600);
+      this.resumeAutoFromCurrent();
+    }, 1800);
   }
 
   resumeAutoFromCurrent() {
