@@ -1285,11 +1285,19 @@ img {
 
 .offer-badge {
   position: absolute;
-  top: 0.8rem;
-  right: 0.8rem;
-  z-index: 1;
+  top: 0;
+  left: 50%;
+  z-index: 4;
+  min-height: 1.45rem;
+  padding: 0 0.58rem;
   color: #06101f;
   background: linear-gradient(135deg, #8ad3ff 0%, #ff8bd6 100%);
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  transform: translate(-50%, -48%);
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.24),
+    0 0 18px rgba(57, 160, 255, 0.16);
 }
 
 .offer-kicker {
