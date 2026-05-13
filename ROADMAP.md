@@ -18,11 +18,10 @@ La landing ya cuenta con:
 
 - Creacion de marca y branding: desde $500 USD.
 - Landing page de conversion: desde $250 USD.
-- Web app para operar y vender: desde $1.500 USD.
-- Automatizacion de WhatsApp e Instagram con IA: desde $1.200 USD.
+- Web app custom para operar y vender: desde $1.500 USD.
+- Consultoria de automatizacion IA con apps de pago: desde $250 USD.
 - App movil o producto digital: desde $1.800 USD.
-- Videos profesionales con IA: desde $200 USD.
-- Imagenes IA tipo poster: desde $50 USD.
+- Pack de videos y posters IA: desde $250 USD.
 
 ## Completado recientemente
 
@@ -37,6 +36,8 @@ La landing ya cuenta con:
 - [x] Convertir precios a USD.
 - [x] Agregar tarjeta de creacion de marca.
 - [x] Agregar tarjeta de automatizacion de WhatsApp e Instagram con IA.
+- [x] Unificar videos e imagenes IA tipo poster en un solo pack.
+- [x] Separar consultoria de automatizacion IA de la web app custom a medida.
 
 ## Fase 1: QA visual y responsive
 
