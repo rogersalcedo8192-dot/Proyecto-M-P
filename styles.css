@@ -1207,6 +1207,7 @@ img {
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   gap: 0.75rem;
   align-items: stretch;
+  padding-top: 0.8rem;
 }
 
 .offer-card {
@@ -1218,7 +1219,7 @@ img {
   min-height: 13.5rem;
   padding: 1rem;
   border-radius: 24px;
-  overflow: hidden;
+  overflow: visible;
   background:
     radial-gradient(circle at 24% 12%, rgba(57, 160, 255, 0.14), transparent 34%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03)),
@@ -1288,16 +1289,25 @@ img {
   top: 0;
   left: 50%;
   z-index: 4;
-  min-height: 1.45rem;
-  padding: 0 0.58rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  min-height: 1.55rem;
+  white-space: nowrap;
+  padding: 0 0.66rem;
   color: #06101f;
   background: linear-gradient(135deg, #8ad3ff 0%, #ff8bd6 100%);
   font-size: 0.56rem;
   letter-spacing: 0.1em;
-  transform: translate(-50%, -48%);
+  transform: translate(-50%, -52%);
   box-shadow:
     0 10px 22px rgba(0, 0, 0, 0.24),
     0 0 18px rgba(57, 160, 255, 0.16);
+}
+
+.offer-badge span {
+  font-size: 0.82rem;
+  line-height: 1;
 }
 
 .offer-kicker {
