@@ -3441,9 +3441,6 @@ main > .section:not(.hero) {
   transform: none;
 }
 
-.is-constrained .solution-tile,
-.is-constrained .ticker-track,
-.is-constrained .service-ticker-track,
 .is-constrained .ai-widget-toggle {
   animation: none;
 }

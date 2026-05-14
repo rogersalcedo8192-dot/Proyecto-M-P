@@ -7,6 +7,7 @@ const rotatingPhrases = [
 
 document.addEventListener("DOMContentLoaded", () => {
   const constrainedMode = isConstrainedExperience();
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.documentElement.classList.toggle("is-constrained", constrainedMode);
   initOptimizedMedia(constrainedMode);
 
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavigationState();
   initMobileNavigation();
   initSvgDraw();
-  initDiagonalCarousels(constrainedMode);
+  initDiagonalCarousels(reducedMotion);
   initOfferDeck();
   initAIWidget();
 });
@@ -787,10 +788,10 @@ function initSvgDraw() {
   document.head.appendChild(style);
 }
 
-function initDiagonalCarousels(constrainedMode = false) {
+function initDiagonalCarousels(staticMode = false) {
   const carousels = document.querySelectorAll("[data-diagonal-carousel]");
   carousels.forEach((carouselNode) => {
-    const carousel = new DiagonalCarousel(carouselNode, constrainedMode);
+    const carousel = new DiagonalCarousel(carouselNode, staticMode);
     carousel.init();
   });
 }
