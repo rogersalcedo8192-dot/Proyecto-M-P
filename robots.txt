@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://proyecto-m-p-production.up.railway.app/sitemap.xml
