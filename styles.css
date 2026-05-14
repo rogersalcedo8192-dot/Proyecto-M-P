@@ -202,11 +202,15 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.14);
   clip-path: polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0 50%);
 }
-}
 
 .section {
   width: var(--content-width);
   margin: 0 auto;
+}
+
+main > .section:not(.hero) {
+  content-visibility: auto;
+  contain-intrinsic-size: 720px;
 }
 
 .glass-panel {
@@ -481,6 +485,7 @@ img {
   background:
     radial-gradient(circle at 18% 24%, rgba(57, 160, 255, 0.2), transparent 28%),
     radial-gradient(circle at 82% 28%, rgba(255, 63, 180, 0.16), transparent 24%),
+    url("assets/logo.jpeg") center / cover no-repeat,
     linear-gradient(180deg, rgba(4, 8, 20, 0.78), rgba(4, 8, 20, 0.9));
 }
 
@@ -1644,7 +1649,7 @@ img {
   border-radius: 30px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0)),
-    url("assets/imagen_rompecabezas.png") center / contain no-repeat;
+    url("assets/imagen_rompecabezas-900.jpg") center / contain no-repeat;
   box-shadow:
     inset 0 0 28px rgba(255, 255, 255, 0.04),
     0 28px 70px rgba(0, 0, 0, 0.42),
@@ -1701,7 +1706,7 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.14);
   background-image:
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0)),
-    url("assets/imagen_rompecabezas.png");
+    url("assets/imagen_rompecabezas-900.jpg");
   background-size: cover, 300% 300%;
   background-repeat: no-repeat;
   box-shadow:
@@ -1720,7 +1725,7 @@ img {
   border-radius: 999px;
   background-image:
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0)),
-    url("assets/imagen_rompecabezas.png");
+    url("assets/imagen_rompecabezas-900.jpg");
   background-size: cover, 300% 300%;
   background-repeat: no-repeat;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -3317,6 +3322,32 @@ img {
     width: 1.5rem;
     height: 1.5rem;
   }
+}
+
+.is-constrained .particle-layer,
+.is-constrained .space-field,
+.is-constrained .pointer-glow {
+  display: none;
+}
+
+.is-constrained .hero-video video[data-desktop-video] {
+  display: none;
+}
+
+.is-constrained .glass-panel {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.is-constrained .cinematic-media:hover .cinematic-card {
+  transform: none;
+}
+
+.is-constrained .solution-tile,
+.is-constrained .ticker-track,
+.is-constrained .service-ticker-track,
+.is-constrained .ai-widget-toggle {
+  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

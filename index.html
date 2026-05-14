@@ -4,11 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>M&P | Creamos el Futuro del Marketing</title>
-    <link rel="icon" type="image/png" href="assets/logo_robot.png" />
+    <link rel="icon" type="image/png" href="assets/favicon-64.png" />
+    <link rel="canonical" href="https://proyecto-m-p-production.up.railway.app/" />
+    <meta name="theme-color" content="#050816" />
     <meta
       name="description"
       content="M&P Enterprise S.A.S automatiza, acelera y escala negocios con inteligencia artificial, automatizaciÃ³n y experiencias digitales premium."
     />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="M&P Enterprise S.A.S | Automatizacion e IA para negocios" />
+    <meta property="og:description" content="Landing pages, automatizacion comercial, CRM, contenido y productos digitales impulsados por inteligencia artificial." />
+    <meta property="og:image" content="https://proyecto-m-p-production.up.railway.app/assets/logo.jpeg" />
+    <meta property="og:url" content="https://proyecto-m-p-production.up.railway.app/" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,6 +24,18 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "M&P Enterprise S.A.S",
+        "url": "https://proyecto-m-p-production.up.railway.app/",
+        "description": "Automatizacion, inteligencia artificial, landing pages, CRM y productos digitales para negocios.",
+        "email": "mailto:rasalcedo76@gmail.com",
+        "telephone": "+573135781020",
+        "areaServed": "CO"
+      }
+    </script>
   </head>
   <body>
     <div class="space-field" id="spaceField" aria-hidden="true"></div>
@@ -26,7 +46,7 @@
       <header class="site-header">
         <nav class="navbar glass-panel">
           <a class="brand" href="#top" aria-label="M&P Enterprise S.A.S">
-            <img src="assets/logo.png" alt="Logo M&P Enterprise S.A.S" />
+            <img src="assets/logo-160.png" alt="Logo M&P Enterprise S.A.S" width="160" height="160" decoding="async" />
             <div>
               <span>M&amp;P</span>
               <small>Creamos el Futuro del Marketing</small>
@@ -67,8 +87,8 @@
       <main id="top">
         <section class="hero section">
           <div class="hero-video">
-  <video autoplay muted loop playsinline preload="metadata" poster="assets/logo.jpeg">
-    <source src="video/mi-video.mp4" type="video/mp4" />
+  <video class="js-lazy-video" autoplay muted loop playsinline preload="none" poster="assets/logo.jpeg" data-desktop-video>
+    <source data-src="video/mi-video.webm" type="video/webm" />
     Tu navegador no soporta video HTML5.
   </video>
 </div>
@@ -531,9 +551,10 @@
                     loop
                     playsinline
                     preload="none"
-                    poster="assets/imagen_rompecabezas.png"
+                    poster="assets/imagen_rompecabezas-900.jpg"
+                    data-lazy-video
                   >
-                    <source src="video/video-rompecabezas.mp4" type="video/mp4" />
+                    <source data-src="video/video-rompecabezas.webm" type="video/webm" />
                   </video>
                   <div class="video-overlay"></div>
                   <div class="video-beam beam-one"></div>
@@ -700,7 +721,7 @@
           <strong data-ai-toggle-copy>Quiero una <span class="ai-key ai-key-blue">demo</span></strong>
         </span>
         <span class="ai-widget-toggle-icon" aria-hidden="true">
-          <img src="assets/logo_robot.png" alt="" />
+          <img src="assets/logo_robot-320.png" alt="" width="320" height="320" loading="lazy" decoding="async" />
         </span>
       </button>
 
@@ -713,7 +734,7 @@
         <div class="ai-widget-header">
           <div class="ai-widget-header-copy">
             <span class="ai-widget-header-avatar" aria-hidden="true">
-              <img src="assets/logo_robot.png" alt="" />
+              <img src="assets/logo_robot-320.png" alt="" width="320" height="320" loading="lazy" decoding="async" />
             </span>
             <div>
             <p class="ai-widget-eyebrow">MiPy Assistant</p>
@@ -765,6 +786,6 @@
       </section>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
   </body>
 </html>

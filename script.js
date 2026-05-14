@@ -7,28 +7,30 @@ const rotatingPhrases = [
 
 document.addEventListener("DOMContentLoaded", () => {
   const constrainedMode = isConstrainedExperience();
+  document.documentElement.classList.toggle("is-constrained", constrainedMode);
+  initOptimizedMedia(constrainedMode);
 
   if (!constrainedMode) {
     initPointerGlow();
     initSpaceField();
+    initCursor();
+    initHoverSpotlights();
+    initParticles();
+    initHeroParallax();
+    initMagneticButtons();
   }
 
-  initCursor();
-  initHoverSpotlights();
   initReveal();
-  initMatrixText();
-  initCinematicWords();
-  initRotatingText();
   if (!constrainedMode) {
-    initParticles();
+    initMatrixText();
+    initCinematicWords();
   }
-  initHeroParallax();
-  initMagneticButtons();
+  initRotatingText();
   initCounters();
   initNavigationState();
   initMobileNavigation();
   initSvgDraw();
-  initDiagonalCarousels();
+  initDiagonalCarousels(constrainedMode);
   initAIWidget();
 });
 
@@ -36,8 +38,48 @@ function isConstrainedExperience() {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
   const saveData = navigator.connection?.saveData === true;
+  const smallViewport = window.matchMedia("(max-width: 720px)").matches;
 
-  return prefersReducedMotion || (coarsePointer && saveData);
+  return prefersReducedMotion || saveData || coarsePointer || smallViewport;
+}
+
+function initOptimizedMedia(constrainedMode) {
+  const lazyVideos = Array.from(document.querySelectorAll(".js-lazy-video, [data-lazy-video]"));
+  if (!lazyVideos.length) return;
+
+  const loadVideo = (video) => {
+    if (video.dataset.loaded === "true") return;
+    if (constrainedMode && video.hasAttribute("data-desktop-video")) return;
+
+    video.querySelectorAll("source[data-src]").forEach((source) => {
+      source.src = source.dataset.src;
+      source.removeAttribute("data-src");
+    });
+
+    video.dataset.loaded = "true";
+    video.load();
+
+    const playPromise = video.play();
+    if (playPromise?.catch) playPromise.catch(() => {});
+  };
+
+  if (!("IntersectionObserver" in window)) {
+    lazyVideos.forEach(loadVideo);
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        loadVideo(entry.target);
+        observer.unobserve(entry.target);
+      });
+    },
+    { rootMargin: "260px 0px" }
+  );
+
+  lazyVideos.forEach((video) => observer.observe(video));
 }
 
 function initPointerGlow() {
@@ -742,10 +784,10 @@ function initSvgDraw() {
   document.head.appendChild(style);
 }
 
-function initDiagonalCarousels() {
+function initDiagonalCarousels(constrainedMode = false) {
   const carousels = document.querySelectorAll("[data-diagonal-carousel]");
   carousels.forEach((carouselNode) => {
-    const carousel = new DiagonalCarousel(carouselNode);
+    const carousel = new DiagonalCarousel(carouselNode, constrainedMode);
     carousel.init();
   });
 }
@@ -926,7 +968,7 @@ function initAIWidget() {
 }
 
 class DiagonalCarousel {
-  constructor(root) {
+  constructor(root, staticMode = false) {
     this.root = root;
     this.track = root.querySelector("[data-carousel-track]");
     this.slides = Array.from(root.querySelectorAll("[data-carousel-slide]"));
@@ -946,6 +988,7 @@ class DiagonalCarousel {
     this.dots = [];
     this.rafId = 0;
     this.resumeTimer = 0;
+    this.staticMode = staticMode;
     this.canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
     this.metrics = {
@@ -966,7 +1009,9 @@ class DiagonalCarousel {
     this.bindEvents();
     this.handleResize();
     this.render();
-    this.rafId = requestAnimationFrame((time) => this.animate(time));
+    if (!this.staticMode) {
+      this.rafId = requestAnimationFrame((time) => this.animate(time));
+    }
   }
 
   buildDots() {
@@ -1047,6 +1092,7 @@ class DiagonalCarousel {
     this.track.style.cursor = "";
     this.target = this.wrapIndex(Math.round(this.target));
     this.autoEnabled = true;
+    this.renderStatic();
   }
 
   handleResize() {
@@ -1142,6 +1188,7 @@ class DiagonalCarousel {
 
   step(direction) {
     this.target = this.wrapFloat(Math.round(this.target) + direction);
+    this.renderStatic();
   }
 
   goTo(index) {
@@ -1154,6 +1201,13 @@ class DiagonalCarousel {
     if (delta < -total / 2) delta += total;
 
     this.target = this.wrapFloat(this.target + delta);
+    this.renderStatic();
+  }
+
+  renderStatic() {
+    if (!this.staticMode) return;
+    this.current = this.wrapFloat(Math.round(this.target));
+    this.render();
   }
 
   pauseAuto() {
