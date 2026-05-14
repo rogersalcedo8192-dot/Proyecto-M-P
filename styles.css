@@ -2830,6 +2830,19 @@ main > .section:not(.hero) {
 }
 
 @media (max-width: 960px) {
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 120;
+    transform: translateZ(0);
+  }
+
+  .hero {
+    padding-top: 6.8rem;
+  }
+
   .nav-links {
     display: none;
   }
@@ -2886,7 +2899,8 @@ main > .section:not(.hero) {
     left: 0;
     right: 0;
     padding: 0.5rem 0 0;
-    z-index: 80;
+    z-index: 120;
+    transform: translateZ(0);
   }
 
   .navbar {
