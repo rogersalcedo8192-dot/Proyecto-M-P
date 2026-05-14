@@ -49,7 +49,6 @@ function initOptimizedMedia(constrainedMode) {
 
   const loadVideo = (video) => {
     if (video.dataset.loaded === "true") return;
-    if (constrainedMode && video.hasAttribute("data-desktop-video")) return;
 
     video.querySelectorAll("source[data-src]").forEach((source) => {
       source.src = source.dataset.src;

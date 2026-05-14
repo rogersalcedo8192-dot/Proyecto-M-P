@@ -482,11 +482,7 @@ main > .section:not(.hero) {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 18% 24%, rgba(57, 160, 255, 0.2), transparent 28%),
-    radial-gradient(circle at 82% 28%, rgba(255, 63, 180, 0.16), transparent 24%),
-    url("assets/logo.jpeg") center / cover no-repeat,
-    linear-gradient(180deg, rgba(4, 8, 20, 0.78), rgba(4, 8, 20, 0.9));
+  background: #050816;
 }
 
 .hero-video video {
@@ -3327,10 +3323,6 @@ main > .section:not(.hero) {
 .is-constrained .particle-layer,
 .is-constrained .space-field,
 .is-constrained .pointer-glow {
-  display: none;
-}
-
-.is-constrained .hero-video video[data-desktop-video] {
   display: none;
 }
 
