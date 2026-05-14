@@ -2600,6 +2600,12 @@ main > .section:not(.hero) {
   transform: translateY(0);
 }
 
+.hero .reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
 @keyframes pulse {
   0%,
   100% {

@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initReveal();
   if (!constrainedMode) {
-    initMatrixText();
     initCinematicWords();
   }
   initRotatingText();
@@ -262,39 +261,6 @@ function initHoverSpotlights() {
       element.style.setProperty("--spotlight-y", `${y}%`);
     });
   });
-}
-
-function initMatrixText() {
-  const target = document.querySelector("[data-matrix-text]");
-  if (!target) return;
-
-  const finalText = target.textContent.replace(/\s+/g, " ").trim();
-  const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+-<>?/|";
-  const revealStep = 1 / Math.max(finalText.length, 1);
-  let progress = 0;
-
-  target.dataset.finalText = finalText;
-
-  const intervalId = window.setInterval(() => {
-    progress += revealStep * 0.9;
-
-    const revealedChars = Math.floor(progress * finalText.length);
-    const scrambled = finalText
-      .split("")
-      .map((char, index) => {
-        if (char === " ") return " ";
-        if (index < revealedChars) return finalText[index];
-        return glyphs[Math.floor(Math.random() * glyphs.length)];
-      })
-      .join("");
-
-    target.textContent = scrambled;
-
-    if (revealedChars >= finalText.length) {
-      target.textContent = finalText;
-      window.clearInterval(intervalId);
-    }
-  }, 42);
 }
 
 function initCinematicWords() {
