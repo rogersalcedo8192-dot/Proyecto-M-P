@@ -21,9 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   initReveal();
-  if (!constrainedMode) {
-    initMatrixText();
-  }
+  initMatrixText();
   initCinematicWords();
   initRotatingText();
   initCounters();
@@ -31,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initMobileNavigation();
   initSvgDraw();
   initDiagonalCarousels(constrainedMode);
+  initOfferDeck();
   initAIWidget();
 });
 
@@ -796,6 +795,103 @@ function initDiagonalCarousels(constrainedMode = false) {
   });
 }
 
+function initOfferDeck() {
+  const grid = document.querySelector(".offers-grid");
+  if (!grid) return;
+
+  const cards = Array.from(grid.querySelectorAll(".offer-card"));
+  if (!cards.length) return;
+
+  const mobileQuery = window.matchMedia("(max-width: 720px)");
+  let current = 0;
+  let isDragging = false;
+  let startX = 0;
+  let dragX = 0;
+
+  const normalize = (index) => (index + cards.length) % cards.length;
+
+  const resetDesktop = () => {
+    grid.classList.remove("is-offer-deck");
+    cards.forEach((card) => {
+      card.classList.remove("is-active", "is-before", "is-after");
+      card.style.transform = "";
+      card.style.opacity = "";
+      card.style.zIndex = "";
+      card.style.pointerEvents = "";
+    });
+  };
+
+  const render = () => {
+    if (!mobileQuery.matches) {
+      resetDesktop();
+      return;
+    }
+
+    grid.classList.add("is-offer-deck");
+
+    cards.forEach((card, index) => {
+      let diff = index - current;
+      if (diff < 0) diff += cards.length;
+
+      const isActive = diff === 0;
+      const stackIndex = Math.min(diff, 3);
+      const x = isActive ? dragX : stackIndex * 13;
+      const y = isActive ? 0 : stackIndex * 13;
+      const rotate = isActive ? clamp(dragX / 18, -12, 12) : stackIndex * -2.6;
+      const scale = isActive ? 1 : 1 - stackIndex * 0.055;
+      const opacity = diff > 3 ? 0 : 1 - stackIndex * 0.12;
+
+      card.classList.toggle("is-active", isActive);
+      card.classList.toggle("is-before", diff > cards.length - 2);
+      card.classList.toggle("is-after", diff > 0 && diff <= 3);
+      card.style.transform = `translate3d(calc(-50% + ${x}px), ${y}px, 0) rotate(${rotate}deg) scale(${scale})`;
+      card.style.opacity = opacity.toFixed(2);
+      card.style.zIndex = String(100 - stackIndex);
+      card.style.pointerEvents = isActive ? "auto" : "none";
+    });
+  };
+
+  const move = (direction) => {
+    current = normalize(current + direction);
+    dragX = 0;
+    render();
+  };
+
+  grid.addEventListener("pointerdown", (event) => {
+    if (!mobileQuery.matches) return;
+    isDragging = true;
+    startX = event.clientX;
+    dragX = 0;
+    grid.setPointerCapture?.(event.pointerId);
+    grid.classList.add("is-dragging");
+  });
+
+  grid.addEventListener("pointermove", (event) => {
+    if (!isDragging || !mobileQuery.matches) return;
+    dragX = event.clientX - startX;
+    render();
+  });
+
+  const finishDrag = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    grid.classList.remove("is-dragging");
+
+    if (Math.abs(dragX) > 68) {
+      move(dragX < 0 ? 1 : -1);
+      return;
+    }
+
+    dragX = 0;
+    render();
+  };
+
+  grid.addEventListener("pointerup", finishDrag);
+  grid.addEventListener("pointercancel", finishDrag);
+  window.addEventListener("resize", render);
+  render();
+}
+
 function initAIWidget() {
   const widget = document.querySelector("[data-ai-widget]");
   if (!widget) return;
@@ -1105,13 +1201,13 @@ class DiagonalCarousel {
     this.canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     this.metrics = compact
       ? {
-          spacing: 74,
-          lift: 12,
-          minScale: 0.78,
-          scaleFactor: 0.07,
-          blur: 0,
-          activeThreshold: 0.28,
-          fadeThreshold: 2.45
+          spacing: 226,
+          lift: 42,
+          minScale: 0.82,
+          scaleFactor: 0.09,
+          blur: 3,
+          activeThreshold: 0.24,
+          fadeThreshold: 1.9
         }
       : {
           spacing: 310,
@@ -1150,26 +1246,16 @@ class DiagonalCarousel {
       const progress = Math.min(limitedDiff / this.metrics.fadeThreshold, 1);
       const signedDirection = rawDiff === 0 ? 0 : rawDiff > 0 ? -1 : 1;
 
-      const mobileDeck = window.innerWidth < 720;
-      const x = mobileDeck
-        ? Math.sign(rawDiff) * Math.min(absDiff, 2.2) * this.metrics.spacing
-        : rawDiff * this.metrics.spacing;
-      const y = mobileDeck
-        ? limitedDiff * this.metrics.lift
-        : signedDirection * limitedDiff * this.metrics.lift;
+      const x = rawDiff * this.metrics.spacing;
+      const y = signedDirection * limitedDiff * this.metrics.lift;
       const scale = clamp(1 - limitedDiff * this.metrics.scaleFactor, this.metrics.minScale, 1);
       const blur = Math.max(0, (progress - 0.18) * this.metrics.blur);
-      const opacity = mobileDeck
-        ? clamp(1 - progress * 0.36, 0.42, 1)
-        : clamp(1 - progress * 0.82, 0.18, 1);
+      const opacity = clamp(1 - progress * 0.82, 0.18, 1);
       const glow = clamp(1 - limitedDiff * 0.42, 0, 1);
       const zIndex = String(1000 - Math.round(limitedDiff * 100));
-      const rotate = mobileDeck
-        ? clamp(rawDiff * -4.5, -10, 10)
-        : 0;
 
       slide.dataset.diffToTarget = rawDiff.toFixed(3);
-      slide.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0) rotate(${rotate.toFixed(2)}deg) scale(${scale})`;
+      slide.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0) scale(${scale})`;
       slide.style.filter = `blur(${blur.toFixed(2)}px)`;
       slide.style.opacity = opacity.toFixed(3);
       slide.style.zIndex = zIndex;
