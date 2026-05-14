@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initReveal();
   if (!constrainedMode) {
+    initMatrixText();
     initCinematicWords();
   }
   initRotatingText();
@@ -261,6 +262,44 @@ function initHoverSpotlights() {
       element.style.setProperty("--spotlight-y", `${y}%`);
     });
   });
+}
+
+function initMatrixText() {
+  const target = document.querySelector("[data-matrix-text]");
+  if (!target) return;
+
+  const finalText = target.textContent.replace(/\s+/g, " ").trim();
+  const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+-<>?/|";
+  const overlay = document.createElement("span");
+  const revealStep = 1 / Math.max(finalText.length, 1);
+  let progress = 0;
+
+  overlay.className = "matrix-text-overlay";
+  overlay.setAttribute("aria-hidden", "true");
+  overlay.textContent = finalText;
+  target.dataset.finalText = finalText;
+  target.appendChild(overlay);
+  target.classList.add("is-matrix-running");
+
+  const intervalId = window.setInterval(() => {
+    progress += revealStep * 1.15;
+
+    const revealedChars = Math.floor(progress * finalText.length);
+    overlay.textContent = finalText
+      .split("")
+      .map((char, index) => {
+        if (char === " ") return " ";
+        if (index < revealedChars) return finalText[index];
+        return glyphs[Math.floor(Math.random() * glyphs.length)];
+      })
+      .join("");
+
+    if (revealedChars >= finalText.length) {
+      overlay.remove();
+      target.classList.remove("is-matrix-running");
+      window.clearInterval(intervalId);
+    }
+  }, 34);
 }
 
 function initCinematicWords() {
