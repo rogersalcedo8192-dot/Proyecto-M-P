@@ -23,8 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initReveal();
   if (!constrainedMode) {
     initMatrixText();
-    initCinematicWords();
   }
+  initCinematicWords();
   initRotatingText();
   initCounters();
   initNavigationState();
@@ -1087,6 +1087,7 @@ class DiagonalCarousel {
     this.dragDelta = event.clientX - this.dragStartX;
     this.target -= this.dragDelta / this.metrics.spacing;
     this.dragStartX = event.clientX;
+    this.renderStatic(true);
   }
 
   onPointerUp() {
@@ -1104,13 +1105,13 @@ class DiagonalCarousel {
     this.canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     this.metrics = compact
       ? {
-          spacing: 226,
-          lift: 42,
-          minScale: 0.82,
-          scaleFactor: 0.09,
-          blur: 3,
-          activeThreshold: 0.24,
-          fadeThreshold: 1.9
+          spacing: 74,
+          lift: 12,
+          minScale: 0.78,
+          scaleFactor: 0.07,
+          blur: 0,
+          activeThreshold: 0.28,
+          fadeThreshold: 2.45
         }
       : {
           spacing: 310,
@@ -1149,16 +1150,26 @@ class DiagonalCarousel {
       const progress = Math.min(limitedDiff / this.metrics.fadeThreshold, 1);
       const signedDirection = rawDiff === 0 ? 0 : rawDiff > 0 ? -1 : 1;
 
-      const x = rawDiff * this.metrics.spacing;
-      const y = signedDirection * limitedDiff * this.metrics.lift;
+      const mobileDeck = window.innerWidth < 720;
+      const x = mobileDeck
+        ? Math.sign(rawDiff) * Math.min(absDiff, 2.2) * this.metrics.spacing
+        : rawDiff * this.metrics.spacing;
+      const y = mobileDeck
+        ? limitedDiff * this.metrics.lift
+        : signedDirection * limitedDiff * this.metrics.lift;
       const scale = clamp(1 - limitedDiff * this.metrics.scaleFactor, this.metrics.minScale, 1);
       const blur = Math.max(0, (progress - 0.18) * this.metrics.blur);
-      const opacity = clamp(1 - progress * 0.82, 0.18, 1);
+      const opacity = mobileDeck
+        ? clamp(1 - progress * 0.36, 0.42, 1)
+        : clamp(1 - progress * 0.82, 0.18, 1);
       const glow = clamp(1 - limitedDiff * 0.42, 0, 1);
       const zIndex = String(1000 - Math.round(limitedDiff * 100));
+      const rotate = mobileDeck
+        ? clamp(rawDiff * -4.5, -10, 10)
+        : 0;
 
       slide.dataset.diffToTarget = rawDiff.toFixed(3);
-      slide.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0) scale(${scale})`;
+      slide.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0) rotate(${rotate.toFixed(2)}deg) scale(${scale})`;
       slide.style.filter = `blur(${blur.toFixed(2)}px)`;
       slide.style.opacity = opacity.toFixed(3);
       slide.style.zIndex = zIndex;
@@ -1208,9 +1219,9 @@ class DiagonalCarousel {
     this.renderStatic();
   }
 
-  renderStatic() {
+  renderStatic(force = false) {
     if (!this.staticMode) return;
-    this.current = this.wrapFloat(Math.round(this.target));
+    this.current = force ? this.wrapFloat(this.target) : this.wrapFloat(Math.round(this.target));
     this.render();
   }
 
