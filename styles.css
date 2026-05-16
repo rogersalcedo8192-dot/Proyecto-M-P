@@ -1280,6 +1280,10 @@ main > .section:not(.hero) {
 }
 
 .offer-card {
+  --offer-card-a: 57, 160, 255;
+  --offer-card-b: 255, 63, 180;
+  --offer-card-deep: #070b1c;
+  --offer-card-label: "Marca";
   position: relative;
   display: grid;
   grid-template-rows: 1fr auto;
@@ -1295,6 +1299,41 @@ main > .section:not(.hero) {
     rgba(8, 12, 28, 0.78);
   transform-style: preserve-3d;
   transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.offer-card:nth-child(2) {
+  --offer-card-a: 255, 63, 180;
+  --offer-card-b: 57, 160, 255;
+  --offer-card-deep: #17071f;
+  --offer-card-label: "Landing";
+}
+
+.offer-card:nth-child(3) {
+  --offer-card-a: 137, 212, 255;
+  --offer-card-b: 255, 139, 214;
+  --offer-card-deep: #06182b;
+  --offer-card-label: "Web app";
+}
+
+.offer-card:nth-child(4) {
+  --offer-card-a: 255, 63, 180;
+  --offer-card-b: 117, 91, 255;
+  --offer-card-deep: #1c0825;
+  --offer-card-label: "IA";
+}
+
+.offer-card:nth-child(5) {
+  --offer-card-a: 57, 160, 255;
+  --offer-card-b: 67, 232, 216;
+  --offer-card-deep: #061a25;
+  --offer-card-label: "Apps";
+}
+
+.offer-card:nth-child(6) {
+  --offer-card-a: 255, 139, 214;
+  --offer-card-b: 57, 160, 255;
+  --offer-card-deep: #1a0b20;
+  --offer-card-label: "Contenido";
 }
 
 .offer-card::before {
@@ -2575,11 +2614,13 @@ main > .section:not(.hero) {
 .faq-item:nth-child(odd),
 .faq-item-blue {
   border-color: rgba(57, 160, 255, 0.34);
+  color: var(--blue);
 }
 
 .faq-item:nth-child(even),
 .faq-item-pink {
   border-color: rgba(255, 63, 180, 0.32);
+  color: var(--pink);
 }
 
 .faq-item summary {
@@ -2591,7 +2632,7 @@ main > .section:not(.hero) {
   gap: 1rem;
   min-height: 4.5rem;
   padding: 1.1rem 0;
-  color: #f7fbff;
+  color: inherit;
   cursor: pointer;
   list-style: none;
 }
@@ -2609,13 +2650,13 @@ main > .section:not(.hero) {
 
 .faq-item:nth-child(odd) summary span,
 .faq-item-blue summary span {
-  color: var(--blue);
+  color: var(--blue) !important;
   text-shadow: 0 0 24px rgba(57, 160, 255, 0.18);
 }
 
 .faq-item:nth-child(even) summary span,
 .faq-item-pink summary span {
-  color: var(--pink);
+  color: var(--pink) !important;
   text-shadow: 0 0 24px rgba(255, 63, 180, 0.18);
 }
 
@@ -3439,31 +3480,31 @@ main > .section:not(.hero) {
   }
 
   .offers-grid.is-offer-deck .offer-card:not(.is-active) {
-    border-color: rgba(255, 255, 255, 0.18);
+    border-color: rgba(var(--offer-card-a), 0.42);
     background:
-      radial-gradient(circle at 24% 20%, rgba(57, 160, 255, 0.28), transparent 28%),
-      radial-gradient(circle at 76% 78%, rgba(255, 63, 180, 0.24), transparent 30%),
+      radial-gradient(circle at 24% 20%, rgba(var(--offer-card-a), 0.34), transparent 30%),
+      radial-gradient(circle at 76% 78%, rgba(var(--offer-card-b), 0.3), transparent 32%),
       linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 18%),
-      repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 12px),
-      linear-gradient(160deg, #070b1c, #121a3c 48%, #050816);
+      repeating-linear-gradient(135deg, rgba(var(--offer-card-a), 0.12) 0 1px, transparent 1px 12px),
+      linear-gradient(160deg, var(--offer-card-deep), rgba(var(--offer-card-a), 0.18) 52%, #050816);
     box-shadow:
       0 18px 46px rgba(0, 0, 0, 0.42),
-      0 0 34px rgba(57, 160, 255, 0.12);
+      0 0 34px rgba(var(--offer-card-a), 0.18);
   }
 
   .offers-grid.is-offer-deck .offer-card:not(.is-active)::before {
-    content: "M&P";
+    content: var(--offer-card-label);
     display: grid;
     place-items: center;
-    color: rgba(255, 255, 255, 0.92);
+    color: rgba(255, 255, 255, 0.95);
     font-family: "Sora", sans-serif;
-    font-size: 2.85rem;
+    font-size: clamp(2rem, 11vw, 2.85rem);
     font-weight: 800;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
     border-color: rgba(255, 255, 255, 0.12);
     background:
-      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08), transparent 44%),
-      linear-gradient(135deg, rgba(57, 160, 255, 0.14), rgba(255, 63, 180, 0.1));
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.11), transparent 44%),
+      linear-gradient(135deg, rgba(var(--offer-card-a), 0.28), rgba(var(--offer-card-b), 0.22));
     z-index: 4;
   }
 
@@ -3479,10 +3520,16 @@ main > .section:not(.hero) {
   }
 
   .offers-grid.is-offer-deck .offer-card.is-active {
+    border-color: rgba(var(--offer-card-a), 0.5);
+    background:
+      radial-gradient(circle at 18% 12%, rgba(var(--offer-card-a), 0.24), transparent 32%),
+      radial-gradient(circle at 86% 18%, rgba(var(--offer-card-b), 0.2), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04)),
+      var(--offer-card-deep);
     box-shadow:
       inset 0 0 46px rgba(255, 63, 180, 0.08),
       0 28px 74px rgba(0, 0, 0, 0.5),
-      0 0 42px rgba(57, 160, 255, 0.14);
+      0 0 42px rgba(var(--offer-card-a), 0.22);
   }
 
   .offer-card h3 {
