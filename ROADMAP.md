@@ -81,6 +81,35 @@ La landing ya cuenta con:
 - Version en ingles si aplica.
 - CMS o panel simple para editar textos, precios y ofertas sin tocar codigo.
 
+## Vision operativa: M&P como empresa de agentes IA
+
+Objetivo: evolucionar M&P hacia una operacion donde el humano actua como Director General y Arquitecto, mientras agentes especializados ejecutan tareas repetitivas con supervision humana.
+
+### Estructura propuesta de agentes
+
+- Agente Supervisor / Director: prioriza objetivos, asigna tareas, revisa resultados y escala decisiones sensibles.
+- Agente Comercial: responde leads, califica prospectos, agenda reuniones, redacta propuestas base y hace seguimiento.
+- Agente de Marketing: analiza oportunidades, redacta campanas, prepara contenido y optimiza mensajes comerciales.
+- Agente de Atencion al Cliente: responde preguntas frecuentes, consulta politicas, gestiona incidencias y escala casos complejos.
+- Agente de Operaciones / Project Manager: convierte ventas en briefs, tareas, fechas y seguimiento interno.
+- Agente de Finanzas: registra pagos, prepara recordatorios, monitorea vencimientos y reporta salud financiera.
+
+### Requisitos para construir esta operacion
+
+- Definir el objetivo central de M&P y los procesos repetitivos por area.
+- Documentar servicios, precios, politicas, tiempos, tono de marca, preguntas frecuentes y plantillas.
+- Conectar herramientas reales: WhatsApp, correo, calendario, CRM, documentos, formularios y pasarelas de pago.
+- Usar una base de conocimiento con RAG para que los agentes respondan con contexto propio de M&P.
+- Crear permisos y limites: que puede hacer cada agente, que debe aprobar un humano y que nunca debe ejecutar solo.
+- Probar cada flujo en entorno controlado antes de publicarlo hacia clientes.
+
+### Primer MVP recomendado
+
+- Empezar con un Agente Comercial M&P.
+- Funciones: responder leads, calificar necesidad/presupuesto/urgencia, recomendar servicio, agendar llamada y guardar datos.
+- Indicadores: tiempo de respuesta, leads calificados, reuniones agendadas, propuestas enviadas y conversion.
+- Mantener human-in-the-loop para descuentos, cierres importantes, reclamos y entregables finales.
+
 ## Checklist inmediato recomendado
 
 - [ ] Revisar la pagina completa en mobile.
