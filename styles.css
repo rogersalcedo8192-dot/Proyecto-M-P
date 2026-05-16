@@ -3604,6 +3604,15 @@ main > .section:not(.hero) {
     min-height: 3rem;
   }
 
+  .offers-grid.is-offer-deck .offer-card.is-active .offer-details,
+  .offers-grid.is-offer-deck .offer-card.is-active .offer-importance {
+    align-self: auto;
+  }
+
+  .offers-grid.is-offer-deck .offer-card.is-active .offer-importance {
+    margin-top: -0.45rem;
+  }
+
   .offer-details summary,
   .offer-importance summary {
     justify-content: space-between;
