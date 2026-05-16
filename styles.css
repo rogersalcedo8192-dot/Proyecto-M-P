@@ -2753,6 +2753,20 @@ main > .section:not(.hero) {
   filter: brightness(1.08);
 }
 
+.ticker-tool-brand {
+  background: transparent;
+}
+
+.ticker-tool-brand .ticker-tool-logo {
+  width: 2.25rem;
+  height: 2.25rem;
+  filter: drop-shadow(0 0 12px rgba(57, 160, 255, 0.22));
+}
+
+.ticker-tool-brand .ticker-tool-name {
+  color: #f7fbff;
+}
+
 .ticker-tool-name {
   color: #eef6ff;
   font-family: "Sora", sans-serif;
