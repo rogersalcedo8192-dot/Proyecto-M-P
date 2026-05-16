@@ -1,8 +1,8 @@
 const rotatingPhrases = [
   "web apps, landing pages y sistemas que convierten",
-  "automatizacion para WhatsApp, Instagram, TikTok y Telegram",
+  "automatización para WhatsApp, Instagram, TikTok y Telegram",
   "CRM, flujos con Make, n8n y correos con Resend",
-  "videos, imagenes, branding y multimedia para vender mejor"
+  "videos, imágenes, branding y multimedia para vender mejor"
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -998,7 +998,7 @@ function initAIWidget() {
     const normalized = message.toLowerCase();
 
     if (normalized.includes("lead") || normalized.includes("capt") || normalized.includes("trafico")) {
-      return "Podemos montar un sistema de captacion con landing, formularios y CRM para que cada lead entre clasificado y con seguimiento automatico.";
+      return "Podemos montar un sistema de captación con landing, formularios y CRM para que cada lead entre clasificado y con seguimiento automático.";
     }
 
     if (normalized.includes("venta") || normalized.includes("whatsapp") || normalized.includes("crm")) {
@@ -1006,18 +1006,18 @@ function initAIWidget() {
     }
 
     if (normalized.includes("landing") || normalized.includes("web") || normalized.includes("pagina")) {
-      return "Podemos construir una landing enfocada en conversion, con propuesta clara, CTA fuerte y medicion lista para optimizar campañas.";
+      return "Podemos construir una landing enfocada en conversión, con propuesta clara, CTA fuerte y medición lista para optimizar campañas.";
     }
 
     if (normalized.includes("app") || normalized.includes("producto") || normalized.includes("saas")) {
-      return "Tambien podemos ayudarte a diseñar y desarrollar un producto digital con experiencia premium y operacion automatizada.";
+      return "También podemos ayudarte a diseñar y desarrollar un producto digital con experiencia premium y operación automatizada.";
     }
 
     if (normalized.includes("precio") || normalized.includes("cuanto") || normalized.includes("cotiza")) {
       return "Para cotizar bien necesito entender objetivo, volumen de leads y si ya tienes CRM, campañas o equipo comercial.";
     }
 
-    return "Entiendo. Para orientarte mejor, cuentame si tu prioridad hoy es conseguir mas leads, automatizar ventas o mejorar conversion.";
+    return "Entiendo. Para orientarte mejor, cuéntame si tu prioridad hoy es conseguir más leads, automatizar ventas o mejorar conversión.";
   };
 
   let interactionCount = 0;
