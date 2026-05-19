@@ -13,6 +13,7 @@ La landing ya cuenta con:
 - Tarjetas de ofertas compactas con detalles desplegables.
 - Tarjeta visual con video del rompecabezas y reverso con imagen.
 - Branding visual consistente con M&P.
+- Formulario multi-paso de leads con consentimiento Habeas Data y backend inicial `POST /api/leads`.
 
 ## Servicios publicados
 
@@ -39,6 +40,8 @@ La landing ya cuenta con:
 - [x] Unificar videos e imagenes IA tipo poster en un solo pack.
 - [x] Separar consultoria de automatizacion IA de la web app custom a medida.
 - [x] Compactar tarjetas de ofertas y ocultar detalles hasta que el usuario los despliegue.
+- [x] Crear formulario de leads en 3 pasos: contacto, empresa y necesidad/presupuesto.
+- [x] Crear backend Node para recibir leads, guardar respaldo local y preparar notificacion por Resend.
 
 ## Fase 1: QA visual y responsive
 
@@ -64,6 +67,9 @@ La landing ya cuenta con:
 - Validar pesos de imagen y video para mejor carga.
 - Revisar que no queden referencias rotas en el menu.
 - Documentar estructura del proyecto en `README.md`.
+- Configurar variables de entorno de Resend para notificaciones de leads.
+- Migrar persistencia de leads desde `data/leads.jsonl` hacia Postgres.
+- Crear tabla `leads` y definir backups/retencion de datos.
 
 ## Fase 4: Preparacion para despliegue
 
@@ -80,6 +86,8 @@ La landing ya cuenta con:
 - Bot conectado a una base de conocimiento real de servicios.
 - Version en ingles si aplica.
 - CMS o panel simple para editar textos, precios y ofertas sin tocar codigo.
+- Integracion con Postgres para historico de leads, segmentacion y reporting.
+- Integracion con Resend para notificacion interna y autorespuesta al lead.
 
 ## Vision operativa: M&P como empresa de agentes IA
 

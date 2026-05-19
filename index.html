@@ -603,18 +603,111 @@
         </section>
 
         <section class="contact section" id="contacto">
-          <div class="contact-card glass-panel reveal">
-            <div>
+          <div class="contact-card lead-card glass-panel reveal">
+            <div class="lead-card-copy">
               <p class="eyebrow">Listo para crecer</p>
               <h2>Tu próximo <span class="brand-accent">sistema de ventas</span> puede empezar <span class="brand-accent-alt">hoy</span>.</h2>
               <p>
-                Hablemos de <span class="brand-accent">automatización</span>, <span class="brand-accent-alt">captación</span> y productos digitales listos para hacer crecer tu empresa.
+                Cuéntanos lo esencial y preparamos una ruta inicial para tu negocio: automatización, captación, contenido, web app o producto digital.
               </p>
+              <div class="lead-contact-links" aria-label="Canales directos">
+                <a href="https://wa.me/573135781020?text=Hola%20quiero%20un%20diagnóstico%20para%20mi%20negocio" target="_blank" rel="noopener">WhatsApp</a>
+                <a href="mailto:rasalcedo76@gmail.com?subject=Quiero%20un%20diagnóstico%20M%26P">Correo</a>
+              </div>
             </div>
 
-            <a class="primary-button" href="mailto:rasalcedo76@gmail.com">
-              Agendar conversacion
-            </a>
+            <form class="lead-form" data-lead-form novalidate>
+              <div class="lead-form-progress" aria-hidden="true">
+                <span class="is-active"></span>
+                <span></span>
+                <span></span>
+              </div>
+
+              <fieldset class="lead-step is-active" data-lead-step="0">
+                <legend>Datos de contacto</legend>
+                <div class="lead-field">
+                  <label for="leadFullName">Nombre completo</label>
+                  <input id="leadFullName" name="fullName" type="text" autocomplete="name" required />
+                </div>
+                <div class="lead-field">
+                  <label for="leadEmail">Correo corporativo</label>
+                  <input id="leadEmail" name="corporateEmail" type="email" autocomplete="email" placeholder="nombre@empresa.com" required />
+                  <small>Preferimos correos de empresa para priorizar negocios B2B.</small>
+                </div>
+                <div class="lead-field">
+                  <label for="leadPhone">WhatsApp</label>
+                  <input id="leadPhone" name="whatsapp" type="tel" autocomplete="tel" placeholder="+57 300 000 0000" required />
+                </div>
+              </fieldset>
+
+              <fieldset class="lead-step" data-lead-step="1" hidden>
+                <legend>Tu empresa</legend>
+                <div class="lead-field">
+                  <label for="leadCompany">Nombre de la empresa</label>
+                  <input id="leadCompany" name="companyName" type="text" autocomplete="organization" required />
+                </div>
+                <div class="lead-field">
+                  <label for="leadWebsite">Sitio web actual</label>
+                  <input id="leadWebsite" name="website" type="url" placeholder="https://tumarca.com" />
+                </div>
+                <div class="lead-field">
+                  <label for="leadCompanySize">Tamaño de la empresa</label>
+                  <select id="leadCompanySize" name="companySize" required>
+                    <option value="">Selecciona una opción</option>
+                    <option value="1-10">1-10 empleados</option>
+                    <option value="11-50">11-50 empleados</option>
+                    <option value="51-200">51-200 empleados</option>
+                    <option value="+200">+200 empleados</option>
+                  </select>
+                </div>
+              </fieldset>
+
+              <fieldset class="lead-step" data-lead-step="2" hidden>
+                <legend>Necesidad del proyecto</legend>
+                <div class="lead-field">
+                  <label for="leadChallenge">Principal desafío</label>
+                  <select id="leadChallenge" name="challenge" required>
+                    <option value="">Selecciona una opción</option>
+                    <option value="lead-gen">Conseguir más clientes</option>
+                    <option value="brand-positioning">Posicionamiento de marca</option>
+                    <option value="social-media">Manejo de redes sociales</option>
+                    <option value="web-design">Diseño de página web</option>
+                    <option value="automation">Automatización</option>
+                  </select>
+                </div>
+                <div class="lead-field">
+                  <label for="leadBudget">Presupuesto estimado mensual</label>
+                  <select id="leadBudget" name="budget" required>
+                    <option value="">Selecciona un rango</option>
+                    <option value="<1000">Menos de $1.000 USD</option>
+                    <option value="1000-2500">$1.000 - $2.500 USD</option>
+                    <option value="2500-5000">$2.500 - $5.000 USD</option>
+                    <option value="+5000">Más de $5.000 USD</option>
+                  </select>
+                </div>
+                <div class="lead-field">
+                  <label for="leadTimeline">¿Cuándo planeas iniciar?</label>
+                  <select id="leadTimeline" name="timeline" required>
+                    <option value="">Selecciona una opción</option>
+                    <option value="immediate">Inmediatamente</option>
+                    <option value="weeks">En las próximas semanas</option>
+                    <option value="research">Solo estoy cotizando / investigando</option>
+                  </select>
+                </div>
+                <label class="lead-consent">
+                  <input name="consent" type="checkbox" required />
+                  <span>Acepto el tratamiento de mis datos para que M&P me contacte sobre esta solicitud.</span>
+                </label>
+              </fieldset>
+
+              <p class="lead-form-message" data-lead-message aria-live="polite"></p>
+
+              <div class="lead-form-actions">
+                <button class="lead-secondary-button" type="button" data-lead-prev hidden>Anterior</button>
+                <button class="primary-button lead-next-button" type="button" data-lead-next>Siguiente</button>
+                <button class="primary-button lead-submit-button" type="submit" hidden>Solicitar diagnóstico</button>
+              </div>
+            </form>
           </div>
         </section>
 
