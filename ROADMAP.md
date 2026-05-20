@@ -43,6 +43,7 @@ La landing ya cuenta con:
 - [x] Crear formulario de leads en 3 pasos: contacto, empresa y necesidad/presupuesto.
 - [x] Crear backend Node para recibir leads, guardar respaldo local y preparar notificacion por Resend.
 - [x] Conectar backend de leads con Postgres mediante `DATABASE_URL`, manteniendo fallback local.
+- [x] Redisenar formulario como pieza premium dark/glass con 6 campos clave: nombre, correo, WhatsApp, tipo de proyecto, presupuesto y descripcion.
 
 ## Fase 1: QA visual y responsive
 
@@ -70,6 +71,7 @@ La landing ya cuenta con:
 - Documentar estructura del proyecto en `README.md`.
 - Configurar variables de entorno de Resend para notificaciones de leads.
 - Validar en Railway que los leads insertan en Postgres desde el formulario publico.
+- Agregar columnas `project_type` y `project_description` en Postgres para guardar el nuevo formulario completo.
 - Crear tabla `leads` y definir backups/retencion de datos.
 
 ## Fase 4: Preparacion para despliegue

@@ -1,4 +1,4 @@
-const rotatingPhrases = [
+﻿const rotatingPhrases = [
   "web apps, landing pages y sistemas que convierten",
   "automatización para WhatsApp, Instagram, TikTok y Telegram",
   "CRM, flujos con Make, n8n y correos con Resend",
@@ -898,127 +898,90 @@ function initLeadForm() {
   const form = document.querySelector("[data-lead-form]");
   if (!form) return;
 
-  const steps = Array.from(form.querySelectorAll("[data-lead-step]"));
-  const progressItems = Array.from(form.querySelectorAll(".lead-form-progress span"));
-  const prevButton = form.querySelector("[data-lead-prev]");
-  const nextButton = form.querySelector("[data-lead-next]");
   const submitButton = form.querySelector(".lead-submit-button");
   const message = form.querySelector("[data-lead-message]");
   const genericDomains = new Set(["gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "icloud.com", "live.com", "msn.com"]);
-  let currentStep = 0;
 
-  const setMessage = (text = "", isError = false) => {
-    if (!message) return;
-    message.textContent = text;
-    message.classList.toggle("is-error", isError);
-  };
-
-  const renderStep = () => {
-    steps.forEach((step, index) => {
-      const isActive = index === currentStep;
-      step.hidden = !isActive;
-      step.classList.toggle("is-active", isActive);
-    });
-
-    progressItems.forEach((item, index) => {
-      item.classList.toggle("is-active", index <= currentStep);
-    });
-
-    if (prevButton) prevButton.hidden = currentStep === 0;
-    if (nextButton) nextButton.hidden = currentStep === steps.length - 1;
-    if (submitButton) submitButton.hidden = currentStep !== steps.length - 1;
-    setMessage("");
-  };
-
-  const getCurrentFields = () => Array.from(steps[currentStep]?.querySelectorAll("input, select") || []);
-
-  const validateCurrentStep = () => {
-    const fields = getCurrentFields();
-    for (const field of fields) {
-      if (!field.checkValidity()) {
-        field.reportValidity();
-        setMessage("Completa los campos requeridos antes de continuar.", true);
-        return false;
-      }
-    }
-
-    const email = form.elements.corporateEmail?.value?.trim().toLowerCase() || "";
-    if (currentStep === 0 && email.includes("@")) {
-      const domain = email.split("@").pop();
-      if (genericDomains.has(domain)) {
-        form.elements.corporateEmail.focus();
-        setMessage("Usa un correo corporativo para priorizar mejor tu solicitud.", true);
-        return false;
-      }
-    }
-
-    return true;
-  };
-
-  const buildPayload = () => {
-    const data = new FormData(form);
-    return {
-      fullName: String(data.get("fullName") || "").trim(),
-      corporateEmail: String(data.get("corporateEmail") || "").trim(),
-      whatsapp: String(data.get("whatsapp") || "").trim(),
-      companyName: String(data.get("companyName") || "").trim(),
-      website: String(data.get("website") || "").trim(),
-      companySize: String(data.get("companySize") || "").trim(),
-      challenge: String(data.get("challenge") || "").trim(),
-      budget: String(data.get("budget") || "").trim(),
-      timeline: String(data.get("timeline") || "").trim(),
-      consent: data.get("consent") === "on"
+  {
+    const setMessage = (text = "", isError = false) => {
+      if (!message) return;
+      message.textContent = text;
+      message.classList.toggle("is-error", isError);
     };
-  };
 
-  nextButton?.addEventListener("click", () => {
-    if (!validateCurrentStep()) return;
-    currentStep = Math.min(currentStep + 1, steps.length - 1);
-    renderStep();
-  });
-
-  prevButton?.addEventListener("click", () => {
-    currentStep = Math.max(currentStep - 1, 0);
-    renderStep();
-  });
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (!validateCurrentStep()) return;
-
-    const payload = buildPayload();
-    if (!payload.consent) {
-      setMessage("Debes aceptar el tratamiento de datos para enviar la solicitud.", true);
-      return;
-    }
-
-    setMessage("Enviando solicitud...");
-    if (submitButton) submitButton.disabled = true;
-
-    try {
-      const response = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      const result = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(result.error || "No pudimos enviar la solicitud.");
+    const validateForm = () => {
+      const fields = Array.from(form.querySelectorAll("input, select, textarea"));
+      for (const field of fields) {
+        if (!field.checkValidity()) {
+          field.reportValidity();
+          setMessage("Completa los campos requeridos antes de enviar.", true);
+          return false;
+        }
       }
 
-      form.reset();
-      currentStep = 0;
-      renderStep();
-      setMessage("Solicitud recibida. Te contactaremos para preparar el diagnóstico.");
-    } catch (error) {
-      setMessage(error.message || "No pudimos enviar la solicitud. Intenta nuevamente.", true);
-    } finally {
-      if (submitButton) submitButton.disabled = false;
-    }
-  });
+      const email = form.elements.corporateEmail?.value?.trim().toLowerCase() || "";
+      if (email.includes("@")) {
+        const domain = email.split("@").pop();
+        if (genericDomains.has(domain)) {
+          form.elements.corporateEmail.focus();
+          setMessage("Usa un correo corporativo para priorizar mejor tu solicitud.", true);
+          return false;
+        }
+      }
 
-  renderStep();
+      return true;
+    };
+
+    const buildPayload = () => {
+      const data = new FormData(form);
+      return {
+        fullName: String(data.get("fullName") || "").trim(),
+        corporateEmail: String(data.get("corporateEmail") || "").trim(),
+        whatsapp: String(data.get("whatsapp") || "").trim(),
+        projectType: String(data.get("projectType") || "").trim(),
+        budget: String(data.get("budget") || "").trim(),
+        projectDescription: String(data.get("projectDescription") || "").trim(),
+        consent: data.get("consent") === "on"
+      };
+    };
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!validateForm()) return;
+
+      const payload = buildPayload();
+      if (!payload.consent) {
+        setMessage("Debes aceptar el tratamiento de datos para enviar la solicitud.", true);
+        return;
+      }
+
+      setMessage("Enviando solicitud...");
+      if (submitButton) submitButton.disabled = true;
+
+      try {
+        const response = await fetch("/api/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(result.error || "No pudimos enviar la solicitud.");
+        }
+
+        form.reset();
+        setMessage("Solicitud recibida. Te contactaremos para preparar el diagnóstico.");
+      } catch (error) {
+        setMessage(error.message || "No pudimos enviar la solicitud. Intenta nuevamente.", true);
+      } finally {
+        if (submitButton) submitButton.disabled = false;
+      }
+    });
+
+    setMessage("");
+    return;
+  }
 }
 
 function initAIWidget() {
@@ -1477,3 +1440,4 @@ function clamp(value, min, max) {
 function randomBetween(min, max) {
   return Math.random() * (max - min) + min;
 }
+

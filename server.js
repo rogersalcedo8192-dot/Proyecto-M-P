@@ -55,16 +55,23 @@ function sanitizeText(value, maxLength = 300) {
 }
 
 function normalizeLead(payload) {
+  const corporateEmail = sanitizeText(payload.corporateEmail, 160).toLowerCase();
+  const emailDomain = corporateEmail.includes("@") ? corporateEmail.split("@").pop() : "";
+  const inferredCompany = emailDomain ? emailDomain.split(".")[0] : "";
+  const projectType = sanitizeText(payload.projectType || payload.challenge, 80);
+
   return {
     fullName: sanitizeText(payload.fullName, 120),
-    corporateEmail: sanitizeText(payload.corporateEmail, 160).toLowerCase(),
+    corporateEmail,
     whatsapp: sanitizeText(payload.whatsapp, 60),
-    companyName: sanitizeText(payload.companyName, 140),
+    companyName: sanitizeText(payload.companyName, 140) || inferredCompany || "No informado",
     website: sanitizeText(payload.website, 220),
-    companySize: sanitizeText(payload.companySize, 20),
-    challenge: sanitizeText(payload.challenge, 60),
+    companySize: sanitizeText(payload.companySize, 20) || "No informado",
+    challenge: projectType,
+    projectType,
     budget: sanitizeText(payload.budget, 40),
-    timeline: sanitizeText(payload.timeline, 60),
+    timeline: sanitizeText(payload.timeline, 60) || "No informado",
+    projectDescription: sanitizeText(payload.projectDescription, 1200),
     consent: payload.consent === true
   };
 }
@@ -74,11 +81,9 @@ function validateLead(lead) {
     "fullName",
     "corporateEmail",
     "whatsapp",
-    "companyName",
-    "companySize",
     "challenge",
     "budget",
-    "timeline"
+    "projectDescription"
   ];
 
   for (const field of requiredFields) {
@@ -128,35 +133,73 @@ async function persistLead(lead) {
 
   if (pgPool) {
     try {
-      const result = await pgPool.query(
-        `insert into leads (
-          full_name,
-          corporate_email,
-          whatsapp,
-          company_name,
-          website,
-          company_size,
-          challenge,
-          budget,
-          timeline,
-          consent,
-          source
-        ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-        returning id, created_at`,
-        [
-          lead.fullName,
-          lead.corporateEmail,
-          lead.whatsapp,
-          lead.companyName,
-          lead.website || null,
-          lead.companySize,
-          lead.challenge,
-          lead.budget,
-          lead.timeline,
-          lead.consent,
-          record.source
-        ]
-      );
+      let result;
+      try {
+        result = await pgPool.query(
+          `insert into leads (
+            full_name,
+            corporate_email,
+            whatsapp,
+            company_name,
+            website,
+            company_size,
+            challenge,
+            project_type,
+            project_description,
+            budget,
+            timeline,
+            consent,
+            source
+          ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+          returning id, created_at`,
+          [
+            lead.fullName,
+            lead.corporateEmail,
+            lead.whatsapp,
+            lead.companyName,
+            lead.website || null,
+            lead.companySize,
+            lead.challenge,
+            lead.projectType,
+            lead.projectDescription,
+            lead.budget,
+            lead.timeline,
+            lead.consent,
+            record.source
+          ]
+        );
+      } catch (error) {
+        if (error?.code !== "42703") throw error;
+        result = await pgPool.query(
+          `insert into leads (
+            full_name,
+            corporate_email,
+            whatsapp,
+            company_name,
+            website,
+            company_size,
+            challenge,
+            budget,
+            timeline,
+            consent,
+            source
+          ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+          returning id, created_at`,
+          [
+            lead.fullName,
+            lead.corporateEmail,
+            lead.whatsapp,
+            lead.companyName,
+            lead.website || null,
+            lead.companySize,
+            lead.challenge,
+            lead.budget,
+            lead.timeline,
+            lead.consent,
+            record.source
+          ]
+        );
+      }
       record.id = result.rows[0]?.id;
       record.createdAt = result.rows[0]?.created_at?.toISOString?.() || record.createdAt;
       record.storage = "postgres";
@@ -184,8 +227,9 @@ async function notifyWithResend(lead) {
     ["Empresa", lead.companyName],
     ["Sitio web", lead.website || "No informado"],
     ["Tamaño", lead.companySize],
-    ["Desafío", lead.challenge],
+    ["Tipo de proyecto", lead.projectType || lead.challenge],
     ["Presupuesto", lead.budget],
+    ["Descripción", lead.projectDescription],
     ["Inicio", lead.timeline]
   ];
 

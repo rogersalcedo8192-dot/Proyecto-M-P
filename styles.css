@@ -2205,43 +2205,91 @@ main > .section:not(.hero) {
   min-width: 0;
 }
 
-.lead-form-progress {
+.lead-form-shell {
+  position: relative;
+  overflow: hidden;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.45rem;
+  gap: 1.05rem;
+  padding: 1rem;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(57, 160, 255, 0.16), transparent 34%),
+    radial-gradient(circle at 100% 12%, rgba(255, 63, 180, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 24px 70px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
-.lead-form-progress span {
-  height: 0.32rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+.lead-form-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(circle at top right, black 0 18%, transparent 58%);
+  pointer-events: none;
 }
 
-.lead-form-progress span.is-active {
-  background: linear-gradient(90deg, var(--blue), var(--pink));
-  box-shadow: 0 0 18px rgba(57, 160, 255, 0.22);
+.lead-form-topline {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.78rem;
 }
 
-.lead-step {
-  display: grid;
-  gap: 0.85rem;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
+.lead-form-topline strong,
+.lead-form-topline small {
+  display: block;
 }
 
-.lead-step[hidden] {
-  display: none;
-}
-
-.lead-step legend {
-  margin-bottom: 0.2rem;
+.lead-form-topline strong {
   color: #f7fbff;
   font-family: "Sora", sans-serif;
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-size: 0.95rem;
+}
+
+.lead-form-topline small {
+  margin-top: 0.16rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.lead-orb {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(57, 160, 255, 0.22), rgba(255, 63, 180, 0.18)),
+    rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 0 26px rgba(57, 160, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.lead-orb svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: #f7fbff;
+  stroke-width: 1.8;
+}
+
+.lead-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
 }
 
 .lead-field {
@@ -2251,22 +2299,61 @@ main > .section:not(.hero) {
 
 .lead-field label {
   color: #f7fbff;
-  font-size: 0.84rem;
+  font-size: 0.76rem;
   font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lead-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.lead-input-wrap svg {
+  position: absolute;
+  left: 0.9rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  fill: none;
+  stroke: rgba(158, 220, 255, 0.82);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+  transition: stroke 180ms ease, filter 180ms ease;
 }
 
 .lead-field input,
-.lead-field select {
+.lead-field select,
+.lead-field textarea {
   width: 100%;
   min-height: 3rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.055);
+  border-radius: 18px;
+  background: rgba(5, 8, 22, 0.34);
   color: #f7fbff;
   font: inherit;
-  padding: 0 0.92rem;
+  padding: 0 0.92rem 0 2.65rem;
   outline: none;
-  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.lead-field textarea {
+  min-height: 7rem;
+  resize: vertical;
+  padding-top: 0.9rem;
+}
+
+.lead-field input::placeholder,
+.lead-field textarea::placeholder {
+  color: rgba(166, 176, 211, 0.62);
 }
 
 .lead-field select option {
@@ -2274,10 +2361,34 @@ main > .section:not(.hero) {
 }
 
 .lead-field input:focus,
-.lead-field select:focus {
-  border-color: rgba(137, 212, 255, 0.42);
-  background: rgba(137, 212, 255, 0.08);
-  box-shadow: 0 0 0 3px rgba(57, 160, 255, 0.1);
+.lead-field select:focus,
+.lead-field textarea:focus,
+.lead-input-wrap:hover input,
+.lead-input-wrap:hover select,
+.lead-input-wrap:hover textarea {
+  border-color: rgba(137, 212, 255, 0.45);
+  background: rgba(137, 212, 255, 0.075);
+  box-shadow:
+    0 0 0 3px rgba(57, 160, 255, 0.1),
+    0 0 24px rgba(57, 160, 255, 0.1);
+}
+
+.lead-input-wrap:focus-within svg,
+.lead-input-wrap:hover svg {
+  stroke: #ff8bd6;
+  filter: drop-shadow(0 0 10px rgba(255, 63, 180, 0.24));
+}
+
+.lead-field-wide {
+  grid-column: 1 / -1;
+}
+
+.lead-textarea-wrap {
+  align-items: flex-start;
+}
+
+.lead-textarea-wrap svg {
+  top: 0.95rem;
 }
 
 .lead-field small {
@@ -2287,6 +2398,8 @@ main > .section:not(.hero) {
 }
 
 .lead-consent {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 0.65rem;
@@ -2320,12 +2433,17 @@ main > .section:not(.hero) {
   flex-wrap: wrap;
   gap: 0.7rem;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .lead-next-button,
 .lead-submit-button {
   border: 0;
   cursor: pointer;
+  min-width: min(100%, 16rem);
+  box-shadow:
+    0 14px 38px rgba(57, 160, 255, 0.2),
+    0 0 34px rgba(255, 63, 180, 0.14);
 }
 
 .sr-only {
@@ -3257,6 +3375,10 @@ main > .section:not(.hero) {
   }
 
   .lead-card {
+    grid-template-columns: 1fr;
+  }
+
+  .lead-grid {
     grid-template-columns: 1fr;
   }
 
