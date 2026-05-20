@@ -2156,6 +2156,13 @@ img {
   transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
 }
 
+#contacto .reveal,
+.contact-card.reveal,
+.lead-card.reveal {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 .lead-card {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(20rem, 1.1fr);
@@ -3091,8 +3098,8 @@ img {
 }
 
 .js-ready .reveal {
-  opacity: 0;
-  transform: translateY(28px);
+  opacity: 1;
+  transform: none;
 }
 
 .js-ready .reveal.is-visible,
