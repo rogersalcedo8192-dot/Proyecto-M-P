@@ -132,81 +132,82 @@ async function persistLead(lead) {
   };
 
   if (pgPool) {
+    let result;
     try {
-      let result;
-      try {
-        result = await pgPool.query(
-          `insert into leads (
-            full_name,
-            corporate_email,
-            whatsapp,
-            company_name,
-            website,
-            company_size,
-            challenge,
-            project_type,
-            project_description,
-            budget,
-            timeline,
-            consent,
-            source
-          ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-          returning id, created_at`,
-          [
-            lead.fullName,
-            lead.corporateEmail,
-            lead.whatsapp,
-            lead.companyName,
-            lead.website || null,
-            lead.companySize,
-            lead.challenge,
-            lead.projectType,
-            lead.projectDescription,
-            lead.budget,
-            lead.timeline,
-            lead.consent,
-            record.source
-          ]
-        );
-      } catch (error) {
-        if (error?.code !== "42703") throw error;
-        result = await pgPool.query(
-          `insert into leads (
-            full_name,
-            corporate_email,
-            whatsapp,
-            company_name,
-            website,
-            company_size,
-            challenge,
-            budget,
-            timeline,
-            consent,
-            source
-          ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-          returning id, created_at`,
-          [
-            lead.fullName,
-            lead.corporateEmail,
-            lead.whatsapp,
-            lead.companyName,
-            lead.website || null,
-            lead.companySize,
-            lead.challenge,
-            lead.budget,
-            lead.timeline,
-            lead.consent,
-            record.source
-          ]
-        );
-      }
-      record.id = result.rows[0]?.id;
-      record.createdAt = result.rows[0]?.created_at?.toISOString?.() || record.createdAt;
-      record.storage = "postgres";
-      return record;
+      result = await pgPool.query(
+        `insert into leads (
+          full_name,
+          corporate_email,
+          whatsapp,
+          company_name,
+          website,
+          company_size,
+          challenge,
+          project_type,
+          project_description,
+          budget,
+          timeline,
+          consent,
+          source
+        ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        returning id, created_at`,
+        [
+          lead.fullName,
+          lead.corporateEmail,
+          lead.whatsapp,
+          lead.companyName,
+          lead.website || null,
+          lead.companySize,
+          lead.challenge,
+          lead.projectType,
+          lead.projectDescription,
+          lead.budget,
+          lead.timeline,
+          lead.consent,
+          record.source
+        ]
+      );
     } catch (error) {
-      console.error("Postgres lead insert failed, writing local fallback:", error);
+      if (error?.code !== "42703") {
+        console.error("Postgres lead insert failed:", error);
+        throw new Error("No pudimos guardar la solicitud en la base de datos.");
+      }
+
+      result = await pgPool.query(
+        `insert into leads (
+          full_name,
+          corporate_email,
+          whatsapp,
+          company_name,
+          website,
+          company_size,
+          challenge,
+          budget,
+          timeline,
+          consent,
+          source
+        ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        returning id, created_at`,
+        [
+          lead.fullName,
+          lead.corporateEmail,
+          lead.whatsapp,
+          lead.companyName,
+          lead.website || null,
+          lead.companySize,
+          lead.challenge,
+          lead.budget,
+          lead.timeline,
+          lead.consent,
+          record.source
+        ]
+      );
     }
+
+    record.id = result.rows[0]?.id;
+    record.createdAt = result.rows[0]?.created_at?.toISOString?.() || record.createdAt;
+    record.storage = "postgres";
+    return record;
   }
 
   await mkdir(dataDir, { recursive: true });
@@ -216,7 +217,10 @@ async function persistLead(lead) {
 }
 
 async function notifyWithResend(lead) {
-  if (!process.env.RESEND_API_KEY || !process.env.LEADS_NOTIFY_TO) return;
+  if (!process.env.RESEND_API_KEY || !process.env.LEADS_NOTIFY_TO) {
+    console.warn("Resend notification skipped: missing RESEND_API_KEY or LEADS_NOTIFY_TO.");
+    return { ok: false, skipped: true };
+  }
 
   const from = process.env.RESEND_FROM || "M&P Leads <onboarding@resend.dev>";
   const subject = `Nuevo lead M&P: ${lead.companyName}`;
@@ -240,23 +244,31 @@ async function notifyWithResend(lead) {
     </table>
   `;
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      from,
-      to: process.env.LEADS_NOTIFY_TO,
-      subject,
-      html
-    })
-  });
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from,
+        to: process.env.LEADS_NOTIFY_TO,
+        subject,
+        html
+      })
+    });
 
-  if (!response.ok) {
-    const body = await response.text().catch(() => "");
-    console.error("Resend notification failed:", body);
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      console.error("Resend notification failed:", body);
+      return { ok: false, skipped: false };
+    }
+
+    return { ok: true, skipped: false };
+  } catch (error) {
+    console.error("Resend notification failed:", error);
+    return { ok: false, skipped: false };
   }
 }
 
@@ -272,8 +284,12 @@ async function handleLead(req, res) {
     }
 
     const savedLead = await persistLead(lead);
-    await notifyWithResend(savedLead);
-    sendJson(res, 201, { ok: true });
+    const notification = await notifyWithResend(savedLead);
+    sendJson(res, 201, {
+      ok: true,
+      storage: savedLead.storage,
+      notification: notification.ok ? "sent" : "not_sent"
+    });
   } catch (error) {
     console.error("Lead submission failed:", error);
     sendJson(res, 500, { ok: false, error: "No pudimos guardar la solicitud." });
@@ -311,7 +327,11 @@ async function serveStatic(req, res) {
 
 const server = createServer(async (req, res) => {
   if (req.method === "GET" && req.url === "/health") {
-    sendJson(res, 200, { ok: true });
+    sendJson(res, 200, {
+      ok: true,
+      database: Boolean(process.env.DATABASE_URL),
+      resend: Boolean(process.env.RESEND_API_KEY && process.env.LEADS_NOTIFY_TO)
+    });
     return;
   }
 

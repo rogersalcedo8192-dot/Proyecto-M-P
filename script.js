@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSvgDraw();
   initDiagonalCarousels(reducedMotion);
   initOfferDeck();
+  initLeadSuccessModal();
   initLeadForm();
   initPrivacyModal();
   initAIWidget();
@@ -973,7 +974,8 @@ function initLeadForm() {
         }
 
         form.reset();
-        setMessage("Solicitud recibida. Te contactaremos para preparar el diagnóstico.");
+        setMessage("");
+        openLeadSuccessModal();
       } catch (error) {
         setMessage(error.message || "No pudimos enviar la solicitud. Intenta nuevamente.", true);
       } finally {
@@ -984,6 +986,32 @@ function initLeadForm() {
     setMessage("");
     return;
   }
+}
+
+function openLeadSuccessModal() {
+  const modal = document.querySelector("[data-lead-success-modal]");
+  if (!modal) return;
+
+  modal.hidden = false;
+  document.body.classList.add("modal-open");
+  modal.querySelector("[data-lead-success-close]")?.focus();
+}
+
+function initLeadSuccessModal() {
+  const modal = document.querySelector("[data-lead-success-modal]");
+  if (!modal) return;
+
+  const closeButtons = Array.from(modal.querySelectorAll("[data-lead-success-close]"));
+  const closeModal = () => {
+    modal.hidden = true;
+    document.body.classList.remove("modal-open");
+  };
+
+  closeButtons.forEach((button) => button.addEventListener("click", closeModal));
+  document.addEventListener("keydown", (event) => {
+    if (modal.hidden || event.key !== "Escape") return;
+    closeModal();
+  });
 }
 
 function initPrivacyModal() {

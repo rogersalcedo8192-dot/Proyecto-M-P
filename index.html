@@ -1009,6 +1009,35 @@
       </section>
     </div>
 
+    <div class="lead-success-modal" data-lead-success-modal hidden>
+      <div class="lead-success-backdrop" data-lead-success-close></div>
+      <section
+        class="lead-success-panel glass-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="leadSuccessTitle"
+        aria-describedby="leadSuccessDescription"
+      >
+        <button class="lead-success-close" type="button" aria-label="Cerrar confirmación" data-lead-success-close>
+          ×
+        </button>
+        <span class="lead-success-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        </span>
+        <p class="eyebrow">Solicitud recibida</p>
+        <h2 id="leadSuccessTitle">Gracias por enviarnos tu solicitud.</h2>
+        <p id="leadSuccessDescription">
+          Ya recibimos tu información. El equipo de M&amp;P revisará el contexto de tu negocio
+          y te contactará por WhatsApp o correo para preparar el diagnóstico.
+        </p>
+        <button class="primary-button lead-success-action" type="button" data-lead-success-close>
+          Perfecto
+        </button>
+      </section>
+    </div>
+
     <script src="script.js" defer></script>
   </body>
 </html>

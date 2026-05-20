@@ -2488,7 +2488,8 @@ img {
   border: 0;
 }
 
-.privacy-modal {
+.privacy-modal,
+.lead-success-modal {
   position: fixed;
   inset: 0;
   z-index: 140;
@@ -2497,11 +2498,13 @@ img {
   padding: 1rem;
 }
 
-.privacy-modal[hidden] {
+.privacy-modal[hidden],
+.lead-success-modal[hidden] {
   display: none;
 }
 
-.privacy-modal-backdrop {
+.privacy-modal-backdrop,
+.lead-success-backdrop {
   position: absolute;
   inset: 0;
   background:
@@ -2512,7 +2515,8 @@ img {
   -webkit-backdrop-filter: blur(14px);
 }
 
-.privacy-modal-panel {
+.privacy-modal-panel,
+.lead-success-panel {
   position: relative;
   z-index: 1;
   width: min(100%, 42rem);
@@ -2531,7 +2535,8 @@ img {
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.privacy-modal-panel h2 {
+.privacy-modal-panel h2,
+.lead-success-panel h2 {
   margin: 0.2rem 0 0.85rem;
   max-width: 14ch;
   color: #f7fbff;
@@ -2540,7 +2545,8 @@ img {
   line-height: 0.98;
 }
 
-.privacy-modal-panel p {
+.privacy-modal-panel p,
+.lead-success-panel p {
   color: var(--muted);
   line-height: 1.65;
 }
@@ -2559,7 +2565,8 @@ img {
   margin: 0;
 }
 
-.privacy-modal-close {
+.privacy-modal-close,
+.lead-success-close {
   position: absolute;
   top: 0.9rem;
   right: 0.9rem;
@@ -2576,17 +2583,56 @@ img {
 }
 
 .privacy-modal-close:hover,
-.privacy-modal-close:focus-visible {
+.privacy-modal-close:focus-visible,
+.lead-success-close:hover,
+.lead-success-close:focus-visible {
   border-color: rgba(255, 63, 180, 0.5);
   box-shadow: 0 0 22px rgba(255, 63, 180, 0.18);
   transform: translateY(-1px);
   outline: none;
 }
 
-.privacy-modal-action {
+.privacy-modal-action,
+.lead-success-action {
   width: 100%;
   border: 0;
   cursor: pointer;
+}
+
+.lead-success-panel {
+  width: min(100%, 34rem);
+  text-align: center;
+}
+
+.lead-success-panel h2 {
+  max-width: 12ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lead-success-icon {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1rem;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.24), transparent 34%),
+    linear-gradient(135deg, rgba(57, 160, 255, 0.95), rgba(255, 63, 180, 0.9));
+  box-shadow:
+    0 0 34px rgba(57, 160, 255, 0.26),
+    0 0 42px rgba(255, 63, 180, 0.2);
+}
+
+.lead-success-icon svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .ai-widget {
