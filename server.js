@@ -341,6 +341,7 @@ async function handleLead(req, res) {
     }
 
     const savedLead = await persistLead(lead);
+    console.log(`Lead persisted: id=${savedLead.id || "local"} storage=${savedLead.storage} email=${savedLead.corporateEmail}`);
     const notification = await notifyWithResend(savedLead);
     sendJson(res, 201, {
       ok: true,
@@ -355,11 +356,16 @@ async function handleLead(req, res) {
 
 async function handleHealth(res) {
   let database = "missing";
+  let leadsCount = null;
+  let lastLeadAt = null;
 
   if (pgPool) {
     try {
-      await pgPool.query("select 1");
+      await ensureLeadsTable();
+      const result = await pgPool.query("select count(*)::int as count, max(created_at) as last_lead_at from leads");
       database = "connected";
+      leadsCount = result.rows[0]?.count ?? 0;
+      lastLeadAt = result.rows[0]?.last_lead_at?.toISOString?.() || null;
     } catch (error) {
       console.error("Health database check failed:", error);
       database = "error";
@@ -369,6 +375,8 @@ async function handleHealth(res) {
   sendJson(res, 200, {
     ok: true,
     database,
+    leadsCount,
+    lastLeadAt,
     resend: Boolean(process.env.RESEND_API_KEY && process.env.LEADS_NOTIFY_TO)
   });
 }
