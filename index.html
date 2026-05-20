@@ -23,7 +23,7 @@
       href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=20260520-leads-modal" />
+    <link rel="stylesheet" href="styles.css?v=20260520-occupation" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -640,12 +640,12 @@
                   </div>
 
                   <div class="lead-field">
-                    <label for="leadEmail">Correo corporativo</label>
+                    <label for="leadEmail">Correo electrónico</label>
                     <div class="lead-input-wrap">
                       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z" /><path d="m22 6-10 7L2 6" /></svg>
-                      <input id="leadEmail" name="corporateEmail" type="email" autocomplete="email" placeholder="nombre@empresa.com" required />
+                      <input id="leadEmail" name="corporateEmail" type="email" autocomplete="email" placeholder="tu@email.com" required />
                     </div>
-                    <small>Priorizamos correos corporativos para entender mejor el contexto B2B.</small>
+                    <small>Puede ser personal o corporativo; lo importante es poder responderte bien.</small>
                   </div>
 
                   <div class="lead-field">
@@ -654,6 +654,27 @@
                       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" /></svg>
                       <input id="leadPhone" name="whatsapp" type="tel" autocomplete="tel" placeholder="+57 300 000 0000" required />
                     </div>
+                  </div>
+
+                  <div class="lead-field">
+                    <label for="leadOccupation">Ocupación</label>
+                    <div class="lead-input-wrap">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2" /><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><path d="M3 13h18" /></svg>
+                      <select id="leadOccupation" name="occupation" required>
+                        <option value="">Selecciona tu perfil</option>
+                        <option value="emprendedor">Emprendedor/a</option>
+                        <option value="estudiante">Estudiante</option>
+                        <option value="desarrollador">Desarrollador/a</option>
+                        <option value="disenador">Diseñador/a</option>
+                        <option value="fotografo">Fotógrafo/a</option>
+                        <option value="creador-contenido">Creador/a de contenido</option>
+                        <option value="empleado-publico">Empleado/a público/a</option>
+                        <option value="empleado-privado">Empleado/a privado/a</option>
+                        <option value="empresario">Empresario/a</option>
+                        <option value="otro">Otro</option>
+                      </select>
+                    </div>
+                    <small>Nos ayuda a ajustar el diagnóstico a tu contexto real.</small>
                   </div>
 
                   <div class="lead-field">
@@ -1038,6 +1059,6 @@
       </section>
     </div>
 
-    <script src="script.js?v=20260520-leads-modal" defer></script>
+    <script src="script.js?v=20260520-occupation" defer></script>
   </body>
 </html>

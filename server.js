@@ -60,13 +60,14 @@ function sanitizeText(value, maxLength = 300) {
 function normalizeLead(payload) {
   const corporateEmail = sanitizeText(payload.corporateEmail, 160).toLowerCase();
   const emailDomain = corporateEmail.includes("@") ? corporateEmail.split("@").pop() : "";
-  const inferredCompany = emailDomain ? emailDomain.split(".")[0] : "";
+  const inferredCompany = emailDomain && !genericEmailDomains.has(emailDomain) ? emailDomain.split(".")[0] : "";
   const projectType = sanitizeText(payload.projectType || payload.challenge, 80);
 
   return {
     fullName: sanitizeText(payload.fullName, 120),
     corporateEmail,
     whatsapp: sanitizeText(payload.whatsapp, 60),
+    occupation: sanitizeText(payload.occupation, 80),
     companyName: sanitizeText(payload.companyName, 140) || inferredCompany || "No informado",
     website: sanitizeText(payload.website, 220),
     companySize: sanitizeText(payload.companySize, 20) || "No informado",
@@ -84,6 +85,7 @@ function validateLead(lead) {
     "fullName",
     "corporateEmail",
     "whatsapp",
+    "occupation",
     "challenge",
     "budget",
     "projectDescription"
@@ -95,11 +97,6 @@ function validateLead(lead) {
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.corporateEmail)) {
     return "Ingresa un correo válido.";
-  }
-
-  const domain = lead.corporateEmail.split("@").pop();
-  if (genericEmailDomains.has(domain)) {
-    return "Usa un correo corporativo para enviar la solicitud.";
   }
 
   if (lead.website && !/^https?:\/\/.+\..+/i.test(lead.website)) {
@@ -136,6 +133,7 @@ async function ensureLeadsTable() {
       full_name text not null,
       corporate_email text not null,
       whatsapp text not null,
+      occupation text,
       company_name text,
       website text,
       company_size text,
@@ -155,6 +153,7 @@ async function ensureLeadsTable() {
       add column if not exists full_name text,
       add column if not exists corporate_email text,
       add column if not exists whatsapp text,
+      add column if not exists occupation text,
       add column if not exists company_name text,
       add column if not exists website text,
       add column if not exists company_size text,
@@ -176,6 +175,10 @@ async function ensureLeadsTable() {
     create index if not exists idx_leads_corporate_email on leads (corporate_email);
   `);
 
+  await pgPool.query(`
+    create index if not exists idx_leads_occupation on leads (occupation);
+  `);
+
   leadsTableReady = true;
 }
 
@@ -195,6 +198,7 @@ async function persistLead(lead) {
           full_name,
           corporate_email,
           whatsapp,
+          occupation,
           company_name,
           website,
           company_size,
@@ -205,12 +209,13 @@ async function persistLead(lead) {
           timeline,
           consent,
           source
-        ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
         returning id, created_at`,
         [
           lead.fullName,
           lead.corporateEmail,
           lead.whatsapp,
+          lead.occupation,
           lead.companyName,
           lead.website || null,
           lead.companySize,
@@ -235,6 +240,7 @@ async function persistLead(lead) {
           full_name,
           corporate_email,
           whatsapp,
+          occupation,
           company_name,
           website,
           company_size,
@@ -243,12 +249,13 @@ async function persistLead(lead) {
           timeline,
           consent,
           source
-        ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
         returning id, created_at`,
         [
           lead.fullName,
           lead.corporateEmail,
           lead.whatsapp,
+          lead.occupation,
           lead.companyName,
           lead.website || null,
           lead.companySize,
@@ -285,6 +292,7 @@ async function notifyWithResend(lead) {
     ["Nombre", lead.fullName],
     ["Correo", lead.corporateEmail],
     ["WhatsApp", lead.whatsapp],
+    ["Ocupación", lead.occupation],
     ["Empresa", lead.companyName],
     ["Sitio web", lead.website || "No informado"],
     ["Tamaño", lead.companySize],

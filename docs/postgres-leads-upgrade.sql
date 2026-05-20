@@ -3,6 +3,7 @@ create table if not exists leads (
   full_name text not null,
   corporate_email text not null,
   whatsapp text not null,
+  occupation text,
   company_name text,
   website text,
   company_size text,
@@ -20,6 +21,7 @@ alter table leads
   add column if not exists full_name text,
   add column if not exists corporate_email text,
   add column if not exists whatsapp text,
+  add column if not exists occupation text,
   add column if not exists company_name text,
   add column if not exists website text,
   add column if not exists company_size text,
@@ -40,3 +42,6 @@ on leads (corporate_email);
 
 create index if not exists idx_leads_project_type
 on leads (project_type);
+
+create index if not exists idx_leads_occupation
+on leads (occupation);

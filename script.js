@@ -903,7 +903,6 @@ function initLeadForm() {
 
   const submitButton = form.querySelector(".lead-submit-button");
   const message = form.querySelector("[data-lead-message]");
-  const genericDomains = new Set(["gmail.com", "hotmail.com", "outlook.com", "yahoo.com", "icloud.com", "live.com", "msn.com"]);
 
   {
     const setMessage = (text = "", isError = false) => {
@@ -922,16 +921,6 @@ function initLeadForm() {
         }
       }
 
-      const email = form.elements.corporateEmail?.value?.trim().toLowerCase() || "";
-      if (email.includes("@")) {
-        const domain = email.split("@").pop();
-        if (genericDomains.has(domain)) {
-          form.elements.corporateEmail.focus();
-          setMessage("Usa un correo corporativo para priorizar mejor tu solicitud.", true);
-          return false;
-        }
-      }
-
       return true;
     };
 
@@ -941,6 +930,7 @@ function initLeadForm() {
         fullName: String(data.get("fullName") || "").trim(),
         corporateEmail: String(data.get("corporateEmail") || "").trim(),
         whatsapp: String(data.get("whatsapp") || "").trim(),
+        occupation: String(data.get("occupation") || "").trim(),
         projectType: String(data.get("projectType") || "").trim(),
         budget: String(data.get("budget") || "").trim(),
         projectDescription: String(data.get("projectDescription") || "").trim(),
