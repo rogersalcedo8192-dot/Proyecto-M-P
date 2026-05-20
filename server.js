@@ -33,6 +33,8 @@ const mimeTypes = {
   ".xml": "application/xml; charset=utf-8"
 };
 
+const noCacheExtensions = new Set([".html", ".css", ".js"]);
+
 const genericEmailDomains = new Set([
   "gmail.com",
   "hotmail.com",
@@ -390,7 +392,7 @@ async function serveStatic(req, res) {
     const extension = path.extname(finalPath).toLowerCase();
     res.writeHead(200, {
       "Content-Type": mimeTypes[extension] || "application/octet-stream",
-      "Cache-Control": extension === ".html" ? "no-cache" : "public, max-age=3600"
+      "Cache-Control": noCacheExtensions.has(extension) ? "no-cache, no-store, must-revalidate" : "public, max-age=3600"
     });
     res.end(content);
   } catch {
