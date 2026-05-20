@@ -17,6 +17,7 @@ const pgPool = databaseUrl
       ssl: databaseUrl.includes("sslmode=require") ? { rejectUnauthorized: false } : undefined
     })
   : null;
+let leadsTableReady = false;
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -124,6 +125,58 @@ async function readRequestJson(req) {
   return raw ? JSON.parse(raw) : {};
 }
 
+async function ensureLeadsTable() {
+  if (!pgPool || leadsTableReady) return;
+
+  await pgPool.query(`
+    create table if not exists leads (
+      id bigserial primary key,
+      full_name text not null,
+      corporate_email text not null,
+      whatsapp text not null,
+      company_name text,
+      website text,
+      company_size text,
+      challenge text,
+      project_type text,
+      project_description text,
+      budget text,
+      timeline text,
+      consent boolean not null default false,
+      source text not null default 'landing-mp',
+      created_at timestamptz not null default now()
+    );
+  `);
+
+  await pgPool.query(`
+    alter table leads
+      add column if not exists full_name text,
+      add column if not exists corporate_email text,
+      add column if not exists whatsapp text,
+      add column if not exists company_name text,
+      add column if not exists website text,
+      add column if not exists company_size text,
+      add column if not exists challenge text,
+      add column if not exists project_type text,
+      add column if not exists project_description text,
+      add column if not exists budget text,
+      add column if not exists timeline text,
+      add column if not exists consent boolean not null default false,
+      add column if not exists source text not null default 'landing-mp',
+      add column if not exists created_at timestamptz not null default now();
+  `);
+
+  await pgPool.query(`
+    create index if not exists idx_leads_created_at on leads (created_at desc);
+  `);
+
+  await pgPool.query(`
+    create index if not exists idx_leads_corporate_email on leads (corporate_email);
+  `);
+
+  leadsTableReady = true;
+}
+
 async function persistLead(lead) {
   const record = {
     ...lead,
@@ -134,6 +187,7 @@ async function persistLead(lead) {
   if (pgPool) {
     let result;
     try {
+      await ensureLeadsTable();
       result = await pgPool.query(
         `insert into leads (
           full_name,
@@ -173,6 +227,7 @@ async function persistLead(lead) {
         throw new Error("No pudimos guardar la solicitud en la base de datos.");
       }
 
+      await ensureLeadsTable();
       result = await pgPool.query(
         `insert into leads (
           full_name,
@@ -296,6 +351,26 @@ async function handleLead(req, res) {
   }
 }
 
+async function handleHealth(res) {
+  let database = "missing";
+
+  if (pgPool) {
+    try {
+      await pgPool.query("select 1");
+      database = "connected";
+    } catch (error) {
+      console.error("Health database check failed:", error);
+      database = "error";
+    }
+  }
+
+  sendJson(res, 200, {
+    ok: true,
+    database,
+    resend: Boolean(process.env.RESEND_API_KEY && process.env.LEADS_NOTIFY_TO)
+  });
+}
+
 async function serveStatic(req, res) {
   const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
   const requestedPath = decodeURIComponent(url.pathname);
@@ -327,11 +402,7 @@ async function serveStatic(req, res) {
 
 const server = createServer(async (req, res) => {
   if (req.method === "GET" && req.url === "/health") {
-    sendJson(res, 200, {
-      ok: true,
-      database: Boolean(process.env.DATABASE_URL),
-      resend: Boolean(process.env.RESEND_API_KEY && process.env.LEADS_NOTIFY_TO)
-    });
+    await handleHealth(res);
     return;
   }
 
