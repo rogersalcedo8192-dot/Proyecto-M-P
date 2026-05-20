@@ -6,6 +6,7 @@
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.add("js-ready");
   const constrainedMode = isConstrainedExperience();
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.documentElement.classList.toggle("is-constrained", constrainedMode);

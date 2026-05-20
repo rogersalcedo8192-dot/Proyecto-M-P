@@ -208,11 +208,6 @@ img {
   margin: 0 auto;
 }
 
-main > .section:not(.hero) {
-  content-visibility: auto;
-  contain-intrinsic-size: 720px;
-}
-
 .glass-panel {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
   border: 1px solid var(--line);
@@ -3088,13 +3083,19 @@ main > .section:not(.hero) {
 }
 
 .reveal {
-  opacity: 0;
-  transform: translateY(28px);
+  opacity: 1;
+  transform: none;
   transition:
     opacity 700ms ease,
     transform 700ms ease;
 }
 
+.js-ready .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.js-ready .reveal.is-visible,
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
