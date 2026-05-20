@@ -34,6 +34,8 @@ const mimeTypes = {
 };
 
 const noCacheExtensions = new Set([".html", ".css", ".js"]);
+const duplicateLeadMessage =
+  "¡Ya enviaste una solicitud con ese correo en las últimas 24 horas! Por favor, vuelve a intentarlo más tarde o espera un poco más la respuesta de nuestro equipo de ventas.";
 
 const genericEmailDomains = new Set([
   "gmail.com",
@@ -176,10 +178,51 @@ async function ensureLeadsTable() {
   `);
 
   await pgPool.query(`
+    create index if not exists idx_leads_email_created_at on leads (lower(corporate_email), created_at desc);
+  `);
+
+  await pgPool.query(`
     create index if not exists idx_leads_occupation on leads (occupation);
   `);
 
   leadsTableReady = true;
+}
+
+async function hasRecentLead(corporateEmail) {
+  const normalizedEmail = sanitizeText(corporateEmail, 160).toLowerCase();
+  if (!normalizedEmail) return false;
+
+  if (pgPool) {
+    await ensureLeadsTable();
+    const result = await pgPool.query(
+      `select 1
+       from leads
+       where lower(corporate_email) = $1
+         and created_at >= now() - interval '24 hours'
+       limit 1`,
+      [normalizedEmail]
+    );
+    return result.rowCount > 0;
+  }
+
+  try {
+    const raw = await readFile(leadsFile, "utf8");
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    return raw
+      .split(/\r?\n/)
+      .filter(Boolean)
+      .some((line) => {
+        try {
+          const record = JSON.parse(line);
+          const createdAt = Date.parse(record.createdAt || "");
+          return record.corporateEmail === normalizedEmail && Number.isFinite(createdAt) && createdAt >= cutoff;
+        } catch {
+          return false;
+        }
+      });
+  } catch {
+    return false;
+  }
 }
 
 async function persistLead(lead) {
@@ -345,6 +388,11 @@ async function handleLead(req, res) {
 
     if (error) {
       sendJson(res, 400, { ok: false, error });
+      return;
+    }
+
+    if (await hasRecentLead(lead.corporateEmail)) {
+      sendJson(res, 429, { ok: false, code: "duplicate_recent_lead", error: duplicateLeadMessage });
       return;
     }
 

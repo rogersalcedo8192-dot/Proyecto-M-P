@@ -45,6 +45,7 @@ La landing ya cuenta con:
 - [x] Conectar backend de leads con Postgres mediante `DATABASE_URL`, manteniendo fallback local.
 - [x] Redisenar formulario como pieza premium dark/glass con campos clave: nombre, correo, WhatsApp, ocupacion, tipo de proyecto, presupuesto y descripcion.
 - [x] Permitir correos personales en leads y segmentar por ocupacion para atender tambien emprendedores, estudiantes y creadores.
+- [x] Bloquear solicitudes duplicadas del mismo correo durante 24 horas para evitar spam y seguimientos repetidos.
 
 ## Fase 1: QA visual y responsive
 

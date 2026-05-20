@@ -40,6 +40,9 @@ on leads (created_at desc);
 create index if not exists idx_leads_corporate_email
 on leads (corporate_email);
 
+create index if not exists idx_leads_email_created_at
+on leads (lower(corporate_email), created_at desc);
+
 create index if not exists idx_leads_project_type
 on leads (project_type);
 
