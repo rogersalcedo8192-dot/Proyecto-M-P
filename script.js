@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initDiagonalCarousels(reducedMotion);
   initOfferDeck();
   initLeadForm();
+  initPrivacyModal();
   initAIWidget();
 });
 
@@ -983,6 +984,49 @@ function initLeadForm() {
     setMessage("");
     return;
   }
+}
+
+function initPrivacyModal() {
+  const modal = document.querySelector("[data-privacy-modal]");
+  if (!modal) return;
+
+  const openButtons = Array.from(document.querySelectorAll("[data-privacy-open]"));
+  const closeButtons = Array.from(modal.querySelectorAll("[data-privacy-close]"));
+  const panel = modal.querySelector(".privacy-modal-panel");
+  let lastFocusedElement = null;
+
+  const focusableSelector = [
+    "button:not([disabled])",
+    "a[href]",
+    "input:not([disabled])",
+    "select:not([disabled])",
+    "textarea:not([disabled])",
+    "[tabindex]:not([tabindex='-1'])"
+  ].join(",");
+
+  const openModal = () => {
+    lastFocusedElement = document.activeElement;
+    modal.hidden = false;
+    document.body.classList.add("modal-open");
+    const firstFocusable = panel?.querySelector(focusableSelector);
+    firstFocusable?.focus();
+  };
+
+  const closeModal = () => {
+    modal.hidden = true;
+    document.body.classList.remove("modal-open");
+    if (lastFocusedElement instanceof HTMLElement) {
+      lastFocusedElement.focus();
+    }
+  };
+
+  openButtons.forEach((button) => button.addEventListener("click", openModal));
+  closeButtons.forEach((button) => button.addEventListener("click", closeModal));
+
+  document.addEventListener("keydown", (event) => {
+    if (modal.hidden || event.key !== "Escape") return;
+    closeModal();
+  });
 }
 
 function initAIWidget() {

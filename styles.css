@@ -34,6 +34,10 @@ body {
   overflow-x: hidden;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -2418,6 +2422,30 @@ img {
   accent-color: var(--blue);
 }
 
+.privacy-link {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #9edcff;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(137, 212, 255, 0.42);
+  text-underline-offset: 0.22em;
+  cursor: pointer;
+  transition: color 180ms ease, text-decoration-color 180ms ease, filter 180ms ease;
+}
+
+.privacy-link:hover,
+.privacy-link:focus-visible {
+  color: #ff8bd6;
+  text-decoration-color: rgba(255, 63, 180, 0.7);
+  filter: drop-shadow(0 0 10px rgba(255, 63, 180, 0.22));
+  outline: none;
+}
+
 .lead-form-message {
   min-height: 1.25rem;
   margin: 0;
@@ -2458,6 +2486,107 @@ img {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+.privacy-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.privacy-modal[hidden] {
+  display: none;
+}
+
+.privacy-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(57, 160, 255, 0.18), transparent 34%),
+    radial-gradient(circle at 82% 10%, rgba(255, 63, 180, 0.16), transparent 30%),
+    rgba(2, 6, 18, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.privacy-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 42rem);
+  max-height: calc(100dvh - 2rem);
+  overflow: auto;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border-radius: 28px;
+  border-color: rgba(137, 212, 255, 0.2);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(57, 160, 255, 0.17), transparent 38%),
+    radial-gradient(circle at 96% 8%, rgba(255, 63, 180, 0.14), transparent 35%),
+    linear-gradient(180deg, rgba(13, 20, 42, 0.9), rgba(7, 11, 27, 0.92));
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.48),
+    0 0 46px rgba(57, 160, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.privacy-modal-panel h2 {
+  margin: 0.2rem 0 0.85rem;
+  max-width: 14ch;
+  color: #f7fbff;
+  font-family: "Sora", sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  line-height: 0.98;
+}
+
+.privacy-modal-panel p {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.privacy-modal-body {
+  display: grid;
+  gap: 0.8rem;
+  margin: 1.1rem 0 1.4rem;
+  padding: 1rem;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.privacy-modal-body p {
+  margin: 0;
+}
+
+.privacy-modal-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 2.35rem;
+  height: 2.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #f7fbff;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.privacy-modal-close:hover,
+.privacy-modal-close:focus-visible {
+  border-color: rgba(255, 63, 180, 0.5);
+  box-shadow: 0 0 22px rgba(255, 63, 180, 0.18);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.privacy-modal-action {
+  width: 100%;
+  border: 0;
+  cursor: pointer;
 }
 
 .ai-widget {

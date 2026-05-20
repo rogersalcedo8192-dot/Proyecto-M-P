@@ -698,7 +698,12 @@
 
                 <label class="lead-consent">
                   <input name="consent" type="checkbox" required />
-                  <span>Acepto el tratamiento de mis datos para que M&P me contacte sobre esta solicitud.</span>
+                  <span>
+                    Acepto el tratamiento de mis datos para que M&amp;P me contacte sobre esta solicitud.
+                    <button class="privacy-link" type="button" data-privacy-open>
+                      Ver política de tratamiento
+                    </button>
+                  </span>
                 </label>
               </div>
 
@@ -961,6 +966,46 @@
             Correo
           </a>
         </div>
+      </section>
+    </div>
+
+    <div class="privacy-modal" data-privacy-modal hidden>
+      <div class="privacy-modal-backdrop" data-privacy-close></div>
+      <section
+        class="privacy-modal-panel glass-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="privacyTitle"
+        aria-describedby="privacyDescription"
+      >
+        <button class="privacy-modal-close" type="button" aria-label="Cerrar política de tratamiento" data-privacy-close>
+          ×
+        </button>
+        <p class="eyebrow">Tratamiento de datos personales</p>
+        <h2 id="privacyTitle">Autorización de contacto M&amp;P</h2>
+        <p id="privacyDescription">
+          MARKETING &amp; PUBLICIDAD ENTERPRISE SAS, en adelante M&amp;P ENTERPRISE o simplemente M&amp;P,
+          tratará los datos personales enviados en este formulario para responder tu solicitud,
+          contactarte por correo, teléfono o WhatsApp, preparar un diagnóstico comercial y hacer seguimiento
+          a oportunidades relacionadas con sus servicios.
+        </p>
+        <div class="privacy-modal-body">
+          <p>
+            Esta autorización se solicita bajo el régimen colombiano de protección de datos personales,
+            especialmente la Ley 1581 de 2012 y sus normas reglamentarias, incluyendo el Decreto 1377 de 2013.
+          </p>
+          <p>
+            Como titular puedes conocer, actualizar, rectificar o solicitar la supresión de tus datos,
+            así como revocar la autorización cuando sea procedente, escribiendo a los canales de contacto de M&amp;P.
+          </p>
+          <p>
+            El envío del formulario no implica una compra ni una obligación contractual; solo autoriza a M&amp;P
+            a contactarte sobre esta solicitud.
+          </p>
+        </div>
+        <button class="primary-button privacy-modal-action" type="button" data-privacy-close>
+          Entendido
+        </button>
       </section>
     </div>
 
