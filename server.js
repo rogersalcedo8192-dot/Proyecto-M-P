@@ -2,6 +2,7 @@ import { createServer } from "node:http";
 import { mkdir, readFile, stat, appendFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import pg from "pg";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,6 +10,13 @@ const port = Number(process.env.PORT || 3000);
 const publicRoot = __dirname;
 const dataDir = path.join(__dirname, "data");
 const leadsFile = path.join(dataDir, "leads.jsonl");
+const databaseUrl = process.env.DATABASE_URL || "";
+const pgPool = databaseUrl
+  ? new pg.Pool({
+      connectionString: databaseUrl,
+      ssl: databaseUrl.includes("sslmode=require") ? { rejectUnauthorized: false } : undefined
+    })
+  : null;
 
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
@@ -112,12 +120,54 @@ async function readRequestJson(req) {
 }
 
 async function persistLead(lead) {
-  await mkdir(dataDir, { recursive: true });
   const record = {
     ...lead,
     source: "landing-mp",
     createdAt: new Date().toISOString()
   };
+
+  if (pgPool) {
+    try {
+      const result = await pgPool.query(
+        `insert into leads (
+          full_name,
+          corporate_email,
+          whatsapp,
+          company_name,
+          website,
+          company_size,
+          challenge,
+          budget,
+          timeline,
+          consent,
+          source
+        ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        returning id, created_at`,
+        [
+          lead.fullName,
+          lead.corporateEmail,
+          lead.whatsapp,
+          lead.companyName,
+          lead.website || null,
+          lead.companySize,
+          lead.challenge,
+          lead.budget,
+          lead.timeline,
+          lead.consent,
+          record.source
+        ]
+      );
+      record.id = result.rows[0]?.id;
+      record.createdAt = result.rows[0]?.created_at?.toISOString?.() || record.createdAt;
+      record.storage = "postgres";
+      return record;
+    } catch (error) {
+      console.error("Postgres lead insert failed, writing local fallback:", error);
+    }
+  }
+
+  await mkdir(dataDir, { recursive: true });
+  record.storage = "local";
   await appendFile(leadsFile, `${JSON.stringify(record)}\n`, "utf8");
   return record;
 }

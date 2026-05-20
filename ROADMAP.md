@@ -42,6 +42,7 @@ La landing ya cuenta con:
 - [x] Compactar tarjetas de ofertas y ocultar detalles hasta que el usuario los despliegue.
 - [x] Crear formulario de leads en 3 pasos: contacto, empresa y necesidad/presupuesto.
 - [x] Crear backend Node para recibir leads, guardar respaldo local y preparar notificacion por Resend.
+- [x] Conectar backend de leads con Postgres mediante `DATABASE_URL`, manteniendo fallback local.
 
 ## Fase 1: QA visual y responsive
 
@@ -68,7 +69,7 @@ La landing ya cuenta con:
 - Revisar que no queden referencias rotas en el menu.
 - Documentar estructura del proyecto en `README.md`.
 - Configurar variables de entorno de Resend para notificaciones de leads.
-- Migrar persistencia de leads desde `data/leads.jsonl` hacia Postgres.
+- Validar en Railway que los leads insertan en Postgres desde el formulario publico.
 - Crear tabla `leads` y definir backups/retencion de datos.
 
 ## Fase 4: Preparacion para despliegue
