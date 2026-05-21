@@ -1,4 +1,5 @@
 import { createServer } from "node:http";
+import { existsSync, readFileSync } from "node:fs";
 import { mkdir, readFile, stat, appendFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -6,6 +7,31 @@ import pg from "pg";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+function loadLocalEnv() {
+  const envPath = path.join(__dirname, ".env");
+  if (!existsSync(envPath)) return;
+
+  const raw = readFileSync(envPath, "utf8");
+  for (const line of raw.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#") || !trimmed.includes("=")) continue;
+
+    const [key, ...valueParts] = trimmed.split("=");
+    const name = key.trim();
+    let value = valueParts.join("=").trim();
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+
+    if (name && process.env[name] === undefined) {
+      process.env[name] = value;
+    }
+  }
+}
+
+loadLocalEnv();
+
 const port = Number(process.env.PORT || 3000);
 const publicRoot = __dirname;
 const dataDir = path.join(__dirname, "data");
@@ -80,6 +106,22 @@ function normalizeLead(payload) {
     projectDescription: sanitizeText(payload.projectDescription, 1200),
     consent: payload.consent === true
   };
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function parseRecipients(value) {
+  return String(value || "")
+    .split(",")
+    .map((recipient) => recipient.trim())
+    .filter(Boolean);
 }
 
 function validateLead(lead) {
@@ -323,13 +365,49 @@ async function persistLead(lead) {
   return record;
 }
 
-async function notifyWithResend(lead) {
-  if (!process.env.RESEND_API_KEY || !process.env.LEADS_NOTIFY_TO) {
-    console.warn("Resend notification skipped: missing RESEND_API_KEY or LEADS_NOTIFY_TO.");
+async function sendResendEmail({ to, subject, html }) {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn("Resend email skipped: missing RESEND_API_KEY.");
     return { ok: false, skipped: true };
   }
 
   const from = process.env.RESEND_FROM || "M&P Leads <onboarding@resend.dev>";
+
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        from,
+        to,
+        subject,
+        html
+      })
+    });
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      console.error("Resend email failed:", body);
+      return { ok: false, skipped: false };
+    }
+
+    return { ok: true, skipped: false };
+  } catch (error) {
+    console.error("Resend email failed:", error);
+    return { ok: false, skipped: false };
+  }
+}
+
+async function notifyAdminWithResend(lead) {
+  const recipients = parseRecipients(process.env.LEADS_NOTIFY_TO);
+  if (!recipients.length) {
+    console.warn("Admin notification skipped: missing LEADS_NOTIFY_TO.");
+    return { ok: false, skipped: true };
+  }
+
   const subject = `Nuevo lead M&P: ${lead.companyName}`;
   const rows = [
     ["Nombre", lead.fullName],
@@ -348,36 +426,35 @@ async function notifyWithResend(lead) {
   const html = `
     <h2>Nuevo lead desde M&P</h2>
     <table cellpadding="8" cellspacing="0" style="border-collapse:collapse">
-      ${rows.map(([key, value]) => `<tr><td><strong>${key}</strong></td><td>${value}</td></tr>`).join("")}
+      ${rows.map(([key, value]) => `<tr><td><strong>${escapeHtml(key)}</strong></td><td>${escapeHtml(value)}</td></tr>`).join("")}
     </table>
   `;
 
-  try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        from,
-        to: process.env.LEADS_NOTIFY_TO,
-        subject,
-        html
-      })
-    });
+  return sendResendEmail({ to: recipients, subject, html });
+}
 
-    if (!response.ok) {
-      const body = await response.text().catch(() => "");
-      console.error("Resend notification failed:", body);
-      return { ok: false, skipped: false };
-    }
-
-    return { ok: true, skipped: false };
-  } catch (error) {
-    console.error("Resend notification failed:", error);
-    return { ok: false, skipped: false };
+async function sendLeadAutoreplyWithResend(lead) {
+  if (!lead.corporateEmail) {
+    return { ok: false, skipped: true };
   }
+
+  const safeName = escapeHtml(lead.fullName);
+  const subject = "Recibimos tu solicitud en M&P";
+  const html = `
+    <h2>Hola, ${safeName}</h2>
+    <p>Gracias por contactar a M&amp;P. Recibimos tu solicitud y nuestro equipo revisara los detalles para responderte pronto.</p>
+    <p><strong>Tipo de proyecto:</strong> ${escapeHtml(lead.projectType || lead.challenge)}</p>
+    <p><strong>Presupuesto:</strong> ${escapeHtml(lead.budget)}</p>
+    <p>Si necesitas agregar informacion, responde directamente a este correo.</p>
+  `;
+
+  return sendResendEmail({ to: lead.corporateEmail, subject, html });
+}
+
+async function notifyWithResend(lead) {
+  const admin = await notifyAdminWithResend(lead);
+  const client = await sendLeadAutoreplyWithResend(lead);
+  return { admin, client };
 }
 
 async function handleLead(req, res) {
@@ -402,7 +479,10 @@ async function handleLead(req, res) {
     sendJson(res, 201, {
       ok: true,
       storage: savedLead.storage,
-      notification: notification.ok ? "sent" : "not_sent"
+      notifications: {
+        admin: notification.admin.ok ? "sent" : "not_sent",
+        client: notification.client.ok ? "sent" : "not_sent"
+      }
     });
   } catch (error) {
     console.error("Lead submission failed:", error);
@@ -433,7 +513,12 @@ async function handleHealth(res) {
     database,
     leadsCount,
     lastLeadAt,
-    resend: Boolean(process.env.RESEND_API_KEY && process.env.LEADS_NOTIFY_TO)
+    resend: {
+      apiKey: Boolean(process.env.RESEND_API_KEY),
+      from: Boolean(process.env.RESEND_FROM),
+      adminRecipients: parseRecipients(process.env.LEADS_NOTIFY_TO).length,
+      ready: Boolean(process.env.RESEND_API_KEY && parseRecipients(process.env.LEADS_NOTIFY_TO).length)
+    }
   });
 }
 
