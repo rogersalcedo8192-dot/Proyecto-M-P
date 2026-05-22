@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSvgDraw();
   initDiagonalCarousels(reducedMotion);
   initOfferDeck();
+  initStarConfetti();
   initLeadSuccessModal();
   initLeadForm();
   initPrivacyModal();
@@ -579,6 +580,143 @@ function resetParticle(particle, width, height, initial) {
   };
 }
 
+function initStarConfetti() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const celebratoryTargets = ".hero .primary-button, .solution-link";
+  let lastCelebration = 0;
+
+  document.querySelectorAll(celebratoryTargets).forEach((target) => {
+    target.addEventListener("click", (event) => {
+      const now = Date.now();
+      if (now - lastCelebration < 1600) return;
+
+      lastCelebration = now;
+      const rect = target.getBoundingClientRect();
+      launchStarConfetti({
+        x: rect.left + rect.width / 2,
+        y: Math.min(rect.top + rect.height / 2, window.innerHeight * 0.78),
+        count: window.innerWidth < 720 ? 24 : 38,
+        spread: window.innerWidth < 720 ? 0.72 : 0.92
+      });
+    });
+  });
+}
+
+function launchStarConfetti(options = {}) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const canvas = getStarConfettiCanvas();
+  const context = canvas.getContext("2d");
+  const colors = ["#39a0ff", "#ff3fb4", "#f7fbff", "#8ad3ff", "#ffd166"];
+  const originX = options.x ?? window.innerWidth / 2;
+  const originY = options.y ?? Math.min(window.innerHeight * 0.42, 360);
+  const count = options.count ?? (window.innerWidth < 720 ? 54 : 86);
+  const spread = options.spread ?? 1;
+  const particles = Array.from({ length: count }, () => {
+    const angle = -Math.PI / 2 + randomBetween(-1.1, 1.1) * spread;
+    const velocity = randomBetween(7, 15);
+    const size = randomBetween(7, 16);
+
+    return {
+      x: originX + randomBetween(-18, 18),
+      y: originY + randomBetween(-12, 12),
+      vx: Math.cos(angle) * velocity + randomBetween(-1.6, 1.6),
+      vy: Math.sin(angle) * velocity + randomBetween(-1.2, 0.8),
+      size,
+      rotation: randomBetween(0, Math.PI * 2),
+      spin: randomBetween(-0.24, 0.24),
+      gravity: randomBetween(0.18, 0.32),
+      drag: randomBetween(0.982, 0.992),
+      wobble: randomBetween(0, Math.PI * 2),
+      color: colors[Math.floor(Math.random() * colors.length)],
+      alpha: 1,
+      life: 0,
+      ttl: randomBetween(72, 118)
+    };
+  });
+
+  let frameId = 0;
+
+  function frame() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach((particle) => {
+      particle.life += 1;
+      particle.wobble += 0.18;
+      particle.vx *= particle.drag;
+      particle.vy = particle.vy * particle.drag + particle.gravity;
+      particle.x += particle.vx + Math.cos(particle.wobble) * 0.45;
+      particle.y += particle.vy;
+      particle.rotation += particle.spin;
+      particle.alpha = Math.max(0, 1 - particle.life / particle.ttl);
+
+      drawConfettiStar(context, particle);
+    });
+
+    if (particles.some((particle) => particle.alpha > 0 && particle.y < window.innerHeight + 40)) {
+      frameId = requestAnimationFrame(frame);
+      return;
+    }
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.remove();
+  }
+
+  frameId = requestAnimationFrame(frame);
+}
+
+function getStarConfettiCanvas() {
+  const canvas = document.createElement("canvas");
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.floor(window.innerWidth * pixelRatio);
+  canvas.height = Math.floor(window.innerHeight * pixelRatio);
+  canvas.style.cssText = [
+    "position: fixed",
+    "inset: 0",
+    "width: 100%",
+    "height: 100%",
+    "z-index: 170",
+    "pointer-events: none"
+  ].join(";");
+
+  const context = canvas.getContext("2d");
+  context.scale(pixelRatio, pixelRatio);
+  document.body.appendChild(canvas);
+  return canvas;
+}
+
+function drawConfettiStar(context, particle) {
+  context.save();
+  context.globalAlpha = particle.alpha;
+  context.translate(particle.x, particle.y);
+  context.rotate(particle.rotation);
+  context.shadowBlur = 14;
+  context.shadowColor = particle.color;
+  context.fillStyle = particle.color;
+  context.strokeStyle = "rgba(255, 255, 255, 0.42)";
+  context.lineWidth = 0.8;
+
+  context.beginPath();
+  for (let point = 0; point < 10; point += 1) {
+    const radius = point % 2 === 0 ? particle.size : particle.size * 0.45;
+    const angle = -Math.PI / 2 + point * (Math.PI / 5);
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+
+    if (point === 0) {
+      context.moveTo(x, y);
+    } else {
+      context.lineTo(x, y);
+    }
+  }
+
+  context.closePath();
+  context.fill();
+  context.stroke();
+  context.restore();
+}
+
 function initHeroParallax() {
   const heroContent = document.querySelector(".hero-content");
   const orbs = document.querySelectorAll(".hero-orb");
@@ -985,6 +1123,12 @@ function openLeadSuccessModal() {
   modal.hidden = false;
   document.body.classList.add("modal-open");
   modal.querySelector("[data-lead-success-close]")?.focus();
+  launchStarConfetti({
+    x: window.innerWidth / 2,
+    y: Math.min(window.innerHeight * 0.36, 320),
+    count: window.innerWidth < 720 ? 58 : 96,
+    spread: 1.08
+  });
 }
 
 function initLeadSuccessModal() {
